@@ -1,0 +1,15 @@
+{
+  "name": "CNAE-9",
+  "ari": {
+    "Baseline": 0.6350736293962169,
+    "AMR-DE": 0.4089279069619211,
+    "EMR-CGC": 0.6520346282379483
+  },
+  "stability": {
+    "Baseline": 0.63538732241906,
+    "AMR-DE": 0.5568007340553063,
+    "EMR-CGC": 0.7084525913299654
+  },
+  "stab_pick": "EMR-CGC",
+  "oracle_pick": "EMR-CGC"
+}

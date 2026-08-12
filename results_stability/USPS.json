@@ -1,0 +1,15 @@
+{
+  "name": "USPS",
+  "ari": {
+    "Baseline": 0.7377784990563295,
+    "AMR-DE": 0.74320059326339,
+    "EMR-CGC": 0.7633634801410287
+  },
+  "stability": {
+    "Baseline": 0.8333208318566958,
+    "AMR-DE": 0.8726548102841685,
+    "EMR-CGC": 0.8603328643594444
+  },
+  "stab_pick": "AMR-DE",
+  "oracle_pick": "EMR-CGC"
+}
