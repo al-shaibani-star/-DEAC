@@ -1,0 +1,28 @@
+\begin{table}[!t]
+\centering
+\caption{Per-dataset clustering accuracy (ACC) across 12 benchmarks. Bold = best. DEAC is the oracle $\max$(Baseline, AMR-DE, EMR-CGC)---an upper bound (cf.\ Table~\ref{tab:gate}).}
+\label{tab:acc_per_dataset}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+Dataset & Baseline & AMR-DE & EMR-CGC & \textbf{DEAC} \\
+\midrule
+Wine         & \textbf{0.910} & 0.890 & \textbf{0.910} & \textbf{0.910} \\
+Glass        & 0.465 & 0.455 & \textbf{0.510} & \textbf{0.510} \\
+Olivetti     & 0.322 & 0.410 & \textbf{0.560} & \textbf{0.560} \\
+CNAE-9       & 0.665 & 0.720 & \textbf{0.760} & \textbf{0.760} \\
+COIL-20      & 0.745 & \textbf{0.835} & 0.818 & \textbf{0.835} \\
+Optdigits    & \textbf{0.895} & 0.840 & 0.872 & \textbf{0.895} \\
+MFeat        & 0.940 & 0.948 & \textbf{0.957} & \textbf{0.957} \\
+Segment.     & 0.548 & 0.325 & \textbf{0.602} & \textbf{0.602} \\
+Satimage     & 0.552 & 0.428 & \textbf{0.678} & \textbf{0.678} \\
+ISOLET       & 0.608 & \textbf{0.645} & 0.625 & \textbf{0.645} \\
+USPS         & 0.893 & 0.620 & \textbf{0.895} & \textbf{0.895} \\
+PenDigits    & 0.792 & 0.625 & \textbf{0.840} & \textbf{0.840} \\
+\midrule
+\textbf{Mean} & 0.695 & 0.645 & 0.752 & \textbf{0.757} \\
+\textbf{Wins} & 2/12 & 2/12 & 9/12 & \textbf{12/12} \\
+\bottomrule
+\end{tabular}
+\end{table}
