@@ -705,7 +705,7 @@ Measured end-to-end runtimes on an Intel~i7 CPU---Wine (178) 14\,s, MFeat (2000)
 % ============================================================
 \section{Discussion}\label{sec:disc}
 
-The results raise three follow-up questions: why arbitration rather than optimization, why SNN rather than KNN, and where the method still falls short.
+The results raise four follow-up questions: why arbitration rather than optimization, how much of the oracle a label-free gate can recover, why SNN rather than KNN, and where the method still falls short.
 
 \subsection{Why Arbitration, Not Optimization?}
 
@@ -725,12 +725,13 @@ narrow but real---it is the deciding output on only COIL-20 and ISOLET
 contributing $+0.003$ to the mean ARI over an ensemble-plus-baseline system
 (0.646 $\to$ 0.649). We report this small margin openly: AMR-DE is a
 complementary engine for specific regimes, not the workhorse. The workhorse
-is EMR-CGC (0.644), and the safety net is the gate. A second design
-choice---SNN instead of plain KNN---deserves the same scrutiny.
+is EMR-CGC (0.644), and the safety net is the gate---but that gate must choose
+without labels, which raises the question of how much of the label-aware oracle
+it can actually recover.
 
 \subsection{How Much of the Oracle Is Deployable?}
 
-The main results (Table~\ref{tab:main_results}) select the best engine per dataset using ground-truth ARI---an oracle unavailable at deployment, where the QualityGate must choose from internal metrics alone. Table~\ref{tab:gate} quantifies the gap on the full data with our exact pipeline at a single seed; its absolute ARIs therefore differ marginally from the five-seed main tables (baseline $0.582$ vs.\ $0.574$), but the gap---not the absolute level---is the quantity of interest. The deployable gate reaches a mean ARI of $0.630$ against the oracle's $0.646$ and the baseline's $0.582$, recovering $75\%$ of the oracle's gain and agreeing with the oracle's engine choice on $6$ of $12$ datasets. The residual gap is a direct expression of the internal--external misalignment that motivates this work: the gate errs precisely where an engine is best by ARI but not by internal score, most visibly on ISOLET (where AMR-DE is secretly optimal) and Olivetti (where EMR-CGC is). The same mechanism means the gate is not strictly monotone over the baseline---on Wine it prefers AMR-DE on internal grounds and loses $0.028$ ARI. We therefore treat the oracle as an upper bound and the gate as the honest deployable performance, and regard closing their gap---better internal proxies for external quality---as the central open problem.
+The main results (Table~\ref{tab:main_results}) select the best engine per dataset using ground-truth ARI---an oracle unavailable at deployment, where the QualityGate must choose from internal metrics alone. Table~\ref{tab:gate} quantifies the gap on the full data with our exact pipeline at a single seed; its absolute ARIs therefore differ marginally from the five-seed main tables (baseline $0.582$ vs.\ $0.574$), but the gap---not the absolute level---is the quantity of interest. The deployable gate reaches a mean ARI of $0.630$ against the oracle's $0.646$ and the baseline's $0.582$, recovering $75\%$ of the oracle's gain and agreeing with the oracle's engine choice on $6$ of $12$ datasets. The residual gap is a direct expression of the internal--external misalignment that motivates this work: the gate errs precisely where an engine is best by ARI but not by internal score, most visibly on ISOLET (where AMR-DE is secretly optimal) and Olivetti (where EMR-CGC is). The same mechanism means the gate is not strictly monotone over the baseline---on Wine it prefers AMR-DE on internal grounds and loses $0.028$ ARI. We therefore treat the oracle as an upper bound and the gate as the honest deployable performance, and regard closing their gap---better internal proxies for external quality---as the central open problem. The gate's ingredients invite the same scrutiny, beginning with the SNN graph on which EMR-CGC is built.
 
 \input{generated/gate_oracle_table.tex}
 
