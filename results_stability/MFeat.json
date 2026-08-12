@@ -1,0 +1,15 @@
+{
+  "name": "MFeat",
+  "ari": {
+    "Baseline": 0.9234336700667358,
+    "AMR-DE": 0.8798106876576643,
+    "EMR-CGC": 0.9123189011633236
+  },
+  "stability": {
+    "Baseline": 0.9795436505240411,
+    "AMR-DE": 0.9390658949806234,
+    "EMR-CGC": 0.9604096167022383
+  },
+  "stab_pick": "Baseline",
+  "oracle_pick": "Baseline"
+}

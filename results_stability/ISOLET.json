@@ -1,0 +1,15 @@
+{
+  "name": "ISOLET",
+  "ari": {
+    "Baseline": 0.42261161816235987,
+    "AMR-DE": 0.4220723734162404,
+    "EMR-CGC": 0.3266066518872641
+  },
+  "stability": {
+    "Baseline": 0.8686884012564429,
+    "AMR-DE": 0.8122313339092111,
+    "EMR-CGC": 0.7856123081858497
+  },
+  "stab_pick": "Baseline",
+  "oracle_pick": "Baseline"
+}

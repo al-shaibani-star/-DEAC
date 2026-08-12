@@ -1,0 +1,15 @@
+{
+  "name": "Segmentation",
+  "ari": {
+    "Baseline": 0.5034667287907137,
+    "AMR-DE": 0.42152697041098536,
+    "EMR-CGC": 0.22912260484392316
+  },
+  "stability": {
+    "Baseline": 0.8258770749951292,
+    "AMR-DE": 0.829194733735737,
+    "EMR-CGC": 0.5453107902733754
+  },
+  "stab_pick": "AMR-DE",
+  "oracle_pick": "Baseline"
+}

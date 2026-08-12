@@ -37,5 +37,3 @@ paper/test_ieee*.tex
 .DS_Store
 Thumbs.db
 
-# ── Exploratory Phase-1 stability run (in progress) ──
-results_stability/

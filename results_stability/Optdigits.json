@@ -1,0 +1,15 @@
+{
+  "name": "Optdigits",
+  "ari": {
+    "Baseline": 0.7926928016627187,
+    "AMR-DE": 0.8019840415439267,
+    "EMR-CGC": 0.7445378441946168
+  },
+  "stability": {
+    "Baseline": 0.9258298786501046,
+    "AMR-DE": 0.9206368540718863,
+    "EMR-CGC": 0.9060956797515652
+  },
+  "stab_pick": "Baseline",
+  "oracle_pick": "AMR-DE"
+}

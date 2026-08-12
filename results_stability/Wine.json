@@ -1,0 +1,15 @@
+{
+  "name": "Wine",
+  "ari": {
+    "Baseline": 0.8024591068836742,
+    "AMR-DE": 0.7741763976704018,
+    "EMR-CGC": 0.7741763976704018
+  },
+  "stability": {
+    "Baseline": 0.9599430584288161,
+    "AMR-DE": 0.9614743224854628,
+    "EMR-CGC": 0.9571743047775527
+  },
+  "stab_pick": "AMR-DE",
+  "oracle_pick": "Baseline"
+}

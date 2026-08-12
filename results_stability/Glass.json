@@ -1,0 +1,15 @@
+{
+  "name": "Glass",
+  "ari": {
+    "Baseline": 0.10396108031937656,
+    "AMR-DE": 0.17142645425881375,
+    "EMR-CGC": 0.16437711815154948
+  },
+  "stability": {
+    "Baseline": 0.6585624090104396,
+    "AMR-DE": 0.7523102187025477,
+    "EMR-CGC": 0.7109338297862507
+  },
+  "stab_pick": "AMR-DE",
+  "oracle_pick": "AMR-DE"
+}

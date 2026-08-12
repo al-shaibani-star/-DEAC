@@ -1,0 +1,15 @@
+{
+  "name": "Olivetti",
+  "ari": {
+    "Baseline": 0.06557192743277111,
+    "AMR-DE": 0.22913072257126427,
+    "EMR-CGC": 0.3463163411849636
+  },
+  "stability": {
+    "Baseline": 0.4044449444881038,
+    "AMR-DE": 0.6301454976660615,
+    "EMR-CGC": 0.5380338732054877
+  },
+  "stab_pick": "AMR-DE",
+  "oracle_pick": "EMR-CGC"
+}

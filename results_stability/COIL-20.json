@@ -1,0 +1,15 @@
+{
+  "name": "COIL-20",
+  "ari": {
+    "Baseline": 0.6617353754195284,
+    "AMR-DE": 0.7177814692837521,
+    "EMR-CGC": 0.7491034587974678
+  },
+  "stability": {
+    "Baseline": 0.8763960445647374,
+    "AMR-DE": 0.8463596757836365,
+    "EMR-CGC": 0.8717777985401589
+  },
+  "stab_pick": "Baseline",
+  "oracle_pick": "EMR-CGC"
+}

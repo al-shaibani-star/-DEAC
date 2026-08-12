@@ -1,0 +1,15 @@
+{
+  "name": "Satimage",
+  "ari": {
+    "Baseline": 0.5717401423543366,
+    "AMR-DE": 0.383612685299348,
+    "EMR-CGC": 0.4696748711959369
+  },
+  "stability": {
+    "Baseline": 0.7932630219381018,
+    "AMR-DE": 0.7140575294350471,
+    "EMR-CGC": 0.7513487866755064
+  },
+  "stab_pick": "Baseline",
+  "oracle_pick": "Baseline"
+}

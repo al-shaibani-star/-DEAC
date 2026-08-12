@@ -1,0 +1,15 @@
+{
+  "name": "PenDigits",
+  "ari": {
+    "Baseline": 0.6932757521030523,
+    "AMR-DE": 0.6628576102874902,
+    "EMR-CGC": 0.6749755729983646
+  },
+  "stability": {
+    "Baseline": 0.8699910252659079,
+    "AMR-DE": 0.9299928772635566,
+    "EMR-CGC": 0.944780486766452
+  },
+  "stab_pick": "EMR-CGC",
+  "oracle_pick": "Baseline"
+}
