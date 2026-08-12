@@ -1,0 +1,25 @@
+{
+  "name": "Olivetti",
+  "n": 400,
+  "rho": 4.0,
+  "aris": {
+    "Baseline": 0.06557192743277111,
+    "AMR-DE": 0.22913072257126427,
+    "EMR-CGC": 0.30202039638252837
+  },
+  "scores": {
+    "Baseline": 0.7829799233585532,
+    "AMR-DE": 0.8326487750194795,
+    "EMR-CGC": 0.8229281264601815
+  },
+  "C": {
+    "Baseline": 5,
+    "AMR-DE": 12,
+    "EMR-CGC": 17
+  },
+  "gate_pick": "AMR-DE",
+  "oracle_pick": "EMR-CGC",
+  "gate_ari": 0.22913072257126427,
+  "oracle_ari": 0.30202039638252837,
+  "baseline_ari": 0.06557192743277111
+}

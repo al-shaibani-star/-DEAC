@@ -1,0 +1,25 @@
+{
+  "name": "Glass",
+  "n": 214,
+  "rho": 4.0,
+  "aris": {
+    "Baseline": 0.10396108031937656,
+    "AMR-DE": 0.17142645425881375,
+    "EMR-CGC": 0.16437711815154948
+  },
+  "scores": {
+    "Baseline": 0.7794359506885667,
+    "AMR-DE": 0.8272708925492723,
+    "EMR-CGC": 0.8406727095766626
+  },
+  "C": {
+    "Baseline": 3,
+    "AMR-DE": 8,
+    "EMR-CGC": 9
+  },
+  "gate_pick": "EMR-CGC",
+  "oracle_pick": "AMR-DE",
+  "gate_ari": 0.16437711815154948,
+  "oracle_ari": 0.17142645425881375,
+  "baseline_ari": 0.10396108031937656
+}

@@ -1,0 +1,86 @@
+\begin{table}[htbp]
+\centering
+\caption{Clustering performance on \textit{Glass}: Baseline vs.\ GWO--DE--NM Hybrid.}
+\label{tab:glass}
+\begin{tabular}{lcc}
+\toprule
+Metric & Baseline & Hybrid (GWO--DE--NM) \\
+\midrule
+ARI & $0.150 \pm 0.017$ & $\mathbf{0.162 \pm 0.014}$ \\
+NMI & $0.294 \pm 0.008$ & $\mathbf{0.336 \pm 0.034}$ \\
+ACC & $\mathbf{0.422 \pm 0.022}$ & $0.381 \pm 0.038$ \\
+SIL & $0.634 \pm 0.081$ & $\mathbf{0.692 \pm 0.092}$ \\
+MOD & $0.703 \pm 0.024$ & $\mathbf{0.800 \pm 0.068}$ \\
+\midrule
+$C$ & $5.0 \pm 0.0$ & $7.8 \pm 2.3$ \\
+Time (s) & $0.24 \pm 0.01$ & $0.21 \pm 0.03$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Fair comparison on \textit{Glass}: all methods use $k$ discovered by GWO--DE--NM.}
+\label{tab:fair_glass}
+\begin{tabular}{lcccc}
+\toprule
+Method & ARI & NMI & ACC & $C$ \\
+\midrule
+KMeans & $\mathbf{0.166 \pm 0.006}$ & $0.318 \pm 0.025$ & $0.420 \pm 0.030$ & $8$ \\
+Spectral & $0.109 \pm 0.021$ & $0.281 \pm 0.057$ & $0.336 \pm 0.011$ & $8$ \\
+Agglomerative & $0.159 \pm 0.001$ & $0.305 \pm 0.024$ & $0.434 \pm 0.016$ & $8$ \\
+GMM & $0.150 \pm 0.021$ & $0.308 \pm 0.032$ & $0.427 \pm 0.027$ & $8$ \\
+HDBSCAN & $-0.025 \pm 0.000$ & $0.036 \pm 0.000$ & $0.374 \pm 0.000$ & $2$ \\
+\midrule
+Baseline & $0.150 \pm 0.017$ & $0.294 \pm 0.008$ & $0.422 \pm 0.022$ & $5.0$ \\
+GWO-only & $0.162 \pm 0.014$ & $0.336 \pm 0.034$ & $0.381 \pm 0.038$ & $7.8$ \\
+GWO--DE--NM & $0.162 \pm 0.014$ & $0.336 \pm 0.034$ & $0.381 \pm 0.038$ & $7.8$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Upper bound comparison on \textit{Glass}: benchmarks use true $k$ (unfair advantage).}
+\label{tab:upper_glass}
+\begin{tabular}{lcccc}
+\toprule
+Method & ARI & NMI & ACC & $C$ \\
+\midrule
+KMeans (true $k$) & $0.152 \pm 0.020$ & $0.276 \pm 0.026$ & $0.419 \pm 0.026$ & $6$ \\
+Spectral (true $k$) & $0.127 \pm 0.016$ & $0.283 \pm 0.021$ & $0.350 \pm 0.009$ & $6$ \\
+Agglomerative (true $k$) & $0.175 \pm 0.000$ & $0.305 \pm 0.000$ & $0.467 \pm 0.000$ & $6$ \\
+GMM (true $k$) & $0.148 \pm 0.026$ & $0.295 \pm 0.029$ & $0.427 \pm 0.017$ & $6$ \\
+HDBSCAN (true $k$) & $-0.025 \pm 0.000$ & $0.036 \pm 0.000$ & $0.374 \pm 0.000$ & $2$ \\
+\midrule
+GWO--DE--NM (auto $k$) & $\mathbf{0.162 \pm 0.014}$ & $\mathbf{0.336 \pm 0.034}$ & $\mathbf{0.381 \pm 0.038}$ & $7.8$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Computational complexity of the proposed GWO--DE--NM hybrid system on \textit{Glass}.}
+\label{tab:complexity_glass}
+\begin{tabular}{lll}
+\toprule
+Component & Complexity & Evaluations \\
+\midrule
+PCA (StandardScaler + PCA) & $\mathcal{O}(n * d * d')$ & 15,408 \\
+KNN (sklearn NearestNeighbors) & $\mathcal{O}(n * k * d')$ & 35,952 \\
+Edge Pruning (quantile-based) & $\mathcal{O}(n * k)$ & 4,494 \\
+Louvain Algorithm & $\mathcal{O}(n * log(n))$ & 1,498 \\
+Silhouette Score (sampled) & $\mathcal{O}(s^2 * d')$ & 1,280,000 \\
+Grey Wolf Optimizer (GWO) & $\mathcal{O}(W * I * F)$ & 36 fitness evaluations (on subsample n'=800) \\
+Differential Evolution (DE) & $\mathcal{O}(G * P * D * F)$ & ~160 fitness evaluations (on subsample n'=800) \\
+Nelder-Mead (Local Search) & $\mathcal{O}(M * F)$ & <=50 fitness evaluations (on subsample n'=800) \\
+3-Layer QualityGate & $\mathcal{O}(1)$ & 3 comparisons per seed \\
+Tiny Cluster Merging & $\mathcal{O}(n_tiny * C * d')$ & Depends on cluster sizes \\
+\midrule
+FULL BASELINE Pipeline & $\mathcal{O}(n * d * d')$ & ~51,360 \\
+\midrule
+FULL HYBRID Pipeline (GWO-DE-NM) & $\mathcal{O}(T * F + n * d * d')$ & ~246 fitness evals + full pipeline \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,25 @@
+{
+  "name": "CNAE-9",
+  "n": 1080,
+  "rho": 4.6475800154489,
+  "aris": {
+    "Baseline": 0.6371761025385045,
+    "AMR-DE": 0.5371379434898788,
+    "EMR-CGC": 0.620896266884574
+  },
+  "scores": {
+    "Baseline": 0.9222073532687094,
+    "AMR-DE": 0.8736234260794626,
+    "EMR-CGC": 0.9075923797457157
+  },
+  "C": {
+    "Baseline": 10,
+    "AMR-DE": 20,
+    "EMR-CGC": 8
+  },
+  "gate_pick": "Baseline",
+  "oracle_pick": "Baseline",
+  "gate_ari": 0.6371761025385045,
+  "oracle_ari": 0.6371761025385045,
+  "baseline_ari": 0.6371761025385045
+}

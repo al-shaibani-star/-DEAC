@@ -1,0 +1,85 @@
+% ============================================================
+% Figure 7: Results Comparison Bar Chart (pgfplots)
+% ============================================================
+\documentclass[border=5pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\definecolor{cb1}{RGB}{0,101,189}
+\definecolor{cb3}{RGB}{0,128,0}
+\definecolor{cb5}{RGB}{117,112,179}
+\definecolor{cbg}{RGB}{200,200,200}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=14cm, height=7cm,
+    ybar,
+    bar width=5pt,
+    font=\footnotesize,
+    title style={font=\small\bfseries},
+    title={ARI Comparison: Baseline vs AMR-DE vs EMR-CGC vs DEAC},
+    symbolic x coords={Wine, Glass, Olivetti, CNAE9, COIL20, Optdigits,
+                       MFeat, Segment, PenDig, USPS, ISOLET, Satimage},
+    xtick=data,
+    x tick label style={rotate=30, anchor=east, font=\scriptsize},
+    ylabel={ARI},
+    ylabel style={font=\footnotesize},
+    ymin=0, ymax=1.05,
+    tick align=inside,
+    tick label style={font=\scriptsize},
+    legend style={
+        font=\scriptsize,
+        at={(0.02,0.98)},
+        anchor=north west,
+        draw=black,
+        fill=white,
+        sharp corners,
+        cells={anchor=west},
+    },
+    grid=none,
+    axis line style={-},
+    every outer x axis line/.append style={black},
+    every outer y axis line/.append style={black},
+    enlarge x limits=0.05,
+    nodes near coords style={font=\tiny, rotate=90, anchor=west},
+]
+
+% Baseline
+\addplot[fill=cbg, draw=cbg!70] coordinates {
+    (Wine,0.802) (Glass,0.150) (Olivetti,0.076) (CNAE9,0.549)
+    (COIL20,0.622) (Optdigits,0.868) (MFeat,0.904)
+    (Segment,0.418) (PenDig,0.736) (USPS,0.861)
+    (ISOLET,0.457) (Satimage,0.439)
+};
+
+% AMR-DE
+\addplot[fill=cb1!60, draw=cb1] coordinates {
+    (Wine,0.774) (Glass,0.147) (Olivetti,0.183) (CNAE9,0.624)
+    (COIL20,0.777) (Optdigits,0.804) (MFeat,0.919)
+    (Segment,0.169) (PenDig,0.550) (USPS,0.533)
+    (ISOLET,0.498) (Satimage,0.277)
+};
+
+% EMR-CGC
+\addplot[fill=cb5!60, draw=cb5] coordinates {
+    (Wine,0.802) (Glass,0.174) (Olivetti,0.342) (CNAE9,0.658)
+    (COIL20,0.762) (Optdigits,0.843) (MFeat,0.937)
+    (Segment,0.465) (PenDig,0.810) (USPS,0.865)
+    (ISOLET,0.473) (Satimage,0.591)
+};
+
+% DEAC
+\addplot[fill=cb3!60, draw=cb3] coordinates {
+    (Wine,0.802) (Glass,0.174) (Olivetti,0.342) (CNAE9,0.658)
+    (COIL20,0.777) (Optdigits,0.868) (MFeat,0.937)
+    (Segment,0.465) (PenDig,0.810) (USPS,0.865)
+    (ISOLET,0.498) (Satimage,0.591)
+};
+
+\legend{Baseline, AMR-DE, EMR-CGC, DEAC}
+
+\end{axis}
+\end{tikzpicture}
+\end{document}

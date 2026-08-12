@@ -1,0 +1,38 @@
+# ── Large data files (download the public benchmark CSVs separately) ──
+datasets/
+*.csv
+mnist_784.csv
+*.rar
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# ── LaTeX build artifacts ──
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# ── Caches / scratch / backups ──
+.cache/
+results*/.cache/
+*.cap2000.*
+paper/tikz_img/*.pdf
+paper/tikz_img/*.tex
+
+# ── Regenerable experiment output tree (kept: results_gate/deep/autoc JSON) ──
+results/
+paper/DEAC_paper_docx.pdf
+paper/DEAC_paper_docx.tex
+paper/test_ieee*.pdf
+paper/test_ieee*.tex
+
+# ── OS ──
+.DS_Store
+Thumbs.db

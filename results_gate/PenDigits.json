@@ -1,0 +1,25 @@
+{
+  "name": "PenDigits",
+  "n": 10992,
+  "rho": 14.82700239428051,
+  "aris": {
+    "Baseline": 0.7402418488078203,
+    "AMR-DE": 0.4782812265295452,
+    "EMR-CGC": 0.7506374286415834
+  },
+  "scores": {
+    "Baseline": 0.9094505628162423,
+    "AMR-DE": 0.89945312938582,
+    "EMR-CGC": 0.9330113359522388
+  },
+  "C": {
+    "Baseline": 26,
+    "AMR-DE": 43,
+    "EMR-CGC": 20
+  },
+  "gate_pick": "EMR-CGC",
+  "oracle_pick": "EMR-CGC",
+  "gate_ari": 0.7506374286415834,
+  "oracle_ari": 0.7506374286415834,
+  "baseline_ari": 0.7402418488078203
+}

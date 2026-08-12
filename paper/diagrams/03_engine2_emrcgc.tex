@@ -1,0 +1,78 @@
+% ============================================================
+% Figure 3: Engine 2 — EMR-CGC Detail
+% ============================================================
+\documentclass[border=5pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc, backgrounds, matrix}
+
+\definecolor{cb1}{RGB}{0,101,189}
+\definecolor{cb3}{RGB}{0,128,0}
+\definecolor{cb5}{RGB}{117,112,179}
+\definecolor{cb4}{RGB}{230,159,0}
+\definecolor{cbg}{RGB}{245,245,245}
+
+\begin{document}
+\begin{tikzpicture}[
+    >=Stealth, node distance=0.4cm,
+    font=\scriptsize,
+    step/.style={rectangle, draw=cb5!70, fill=cbg, minimum width=3cm,
+        minimum height=0.45cm, align=center},
+    phase/.style={rectangle, rounded corners=2pt, draw=#1, fill=#1!12,
+        minimum width=3.5cm, minimum height=0.55cm, align=center,
+        font=\scriptsize\bfseries, line width=0.7pt},
+    arr/.style={-Stealth, line width=0.5pt},
+]
+
+% Title
+\node[font=\small\bfseries, cb5] (title) {Engine 2: EMR-CGC};
+
+% Stage 1: Representations
+\node[phase=cb5, below=0.4cm of title] (s1) {Stage 1: Multi-Representation};
+\node[step, below=0.25cm of s1] (r1) {PCA};
+\node[step, right=0.3cm of r1] (r2) {UMAP$_1$};
+\node[step, right=0.3cm of r2] (r3) {UMAP$_2$};
+\node[step, below=0.2cm of r1] (r4) {UMAP$_3$};
+\node[step, right=0.3cm of r4] (r5) {t-SNE};
+
+% Stage 2: Graph configs
+\node[phase=cb4, below=0.6cm of r5, xshift=-1.5cm] (s2) {Stage 2: Multi-Config Clustering};
+
+\node[step, below=0.25cm of s2, xshift=-1.5cm] (g1) {$k{=}10,\; r{=}0.1$};
+\node[step, right=0.15cm of g1] (g2) {$k{=}10,\; r{=}0.25$};
+\node[step, right=0.15cm of g2] (g3) {$k{=}10,\; r{=}0.5$};
+\node[step, below=0.15cm of g1] (g4) {$k{=}20,\; r{=}0.1$};
+\node[step, right=0.15cm of g4] (g5) {$\cdots$};
+\node[step, right=0.15cm of g5] (g6) {$k{=}50,\; r{=}0.5$};
+
+% Innovation: SNN + Leiden
+\node[phase=cb1, below=0.5cm of g5] (snn) {SNN Graph + Leiden};
+\node[step, draw=cb1, below=0.25cm of snn] (snn1) {Edge weight $= |N(i) \cap N(j)| / k$};
+\node[step, draw=cb1, below=0.2cm of snn1] (snn2) {Leiden (RBConfiguration)};
+
+% Total runs
+\node[step, draw=cb3, fill=cb3!10, below=0.4cm of snn2] (total) {5 reps $\times$ 12 configs $=$ \textbf{60 runs}};
+
+% Best run selection
+\node[phase=cb3, below=0.4cm of total] (best) {Best Run by Quality Score};
+\node[step, draw=cb3, fill=cb3!8, below=0.25cm of best] (score) {$\max(0.35 \cdot \text{MOD} + 0.40 \cdot \text{SIL} + 0.25 \cdot \text{BAL})$};
+
+% Arrows
+\draw[arr] (title) -- (s1);
+\draw[arr] (s1) -- (r1);
+\draw[arr] (s1) -- (r2);
+\draw[arr] (s1) -- (r3);
+
+\draw[arr] (r4) -- (s2);
+\draw[arr] (r5) -- (s2);
+\draw[arr] (s2) -- (g1);
+
+\draw[arr] (g5) -- (snn);
+\draw[arr] (snn) -- (snn1);
+\draw[arr] (snn1) -- (snn2);
+\draw[arr] (snn2) -- (total);
+\draw[arr] (total) -- (best);
+\draw[arr] (best) -- (score);
+
+\end{tikzpicture}
+\end{document}

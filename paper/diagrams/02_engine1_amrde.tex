@@ -1,0 +1,73 @@
+% ============================================================
+% Figure 2: Engine 1 — AMR-DE Detail
+% ============================================================
+\documentclass[border=5pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc, backgrounds, chains}
+
+\definecolor{cb1}{RGB}{0,101,189}
+\definecolor{cb3}{RGB}{0,128,0}
+\definecolor{cb4}{RGB}{230,159,0}
+\definecolor{cbg}{RGB}{245,245,245}
+
+\begin{document}
+\begin{tikzpicture}[
+    >=Stealth, node distance=0.5cm,
+    font=\scriptsize,
+    step/.style={rectangle, draw=cb1!80, fill=cbg, minimum width=3cm,
+        minimum height=0.5cm, align=center},
+    phase/.style={rectangle, rounded corners=2pt, draw=#1, fill=#1!12,
+        minimum width=3.5cm, minimum height=0.6cm, align=center,
+        font=\scriptsize\bfseries, line width=0.7pt},
+    arr/.style={-Stealth, line width=0.5pt},
+]
+
+% Title
+\node[font=\small\bfseries, cb1] (title) {Engine 1: AMR-DE};
+
+% Stage 1
+\node[phase=cb4, below=0.5cm of title] (s1) {Stage 1: RepScan};
+\node[step, below=0.3cm of s1] (s1a) {PCA (whiten=True)};
+\node[step, below=0.2cm of s1a] (s1b) {UMAP ($nn{=}10, md{=}0.0$)};
+\node[step, below=0.2cm of s1b] (s1c) {UMAP ($nn{=}15, md{=}0.1$)};
+\node[step, below=0.2cm of s1c] (s1d) {UMAP ($nn{=}30, md{=}0.2$)};
+\node[step, below=0.2cm of s1d] (s1e) {t-SNE ($perp{=}30$)};
+
+\node[step, draw=cb3, fill=cb3!10, below=0.3cm of s1e] (s1best) {$\rightarrow$ Best by SIL+MOD+CH};
+
+% Stage 2
+\node[phase=cb1, below=0.5cm of s1best] (s2) {Stage 2: Multi-restart DE};
+\node[step, below=0.3cm of s2] (s2a) {LHS Initialization ($P{=}20$)};
+\node[step, below=0.2cm of s2a] (s2b) {DE: mutation $\rightarrow$ crossover $\rightarrow$ selection};
+\node[step, below=0.2cm of s2b] (s2c) {$G{=}8$ generations $\times$ $R{=}2$ restarts};
+\node[step, below=0.2cm of s2c] (s2d) {Nelder--Mead refinement (50 iter)};
+
+\node[step, draw=cb3, fill=cb3!10, below=0.3cm of s2d] (s2best) {$\theta^* = (k^*, d'^*, q^*, r^*)$};
+
+% Arrows
+\draw[arr] (title) -- (s1);
+\draw[arr] (s1) -- (s1a);
+\draw[arr] (s1a) -- (s1b);
+\draw[arr] (s1b) -- (s1c);
+\draw[arr] (s1c) -- (s1d);
+\draw[arr] (s1d) -- (s1e);
+\draw[arr] (s1e) -- (s1best);
+\draw[arr] (s1best) -- (s2);
+\draw[arr] (s2) -- (s2a);
+\draw[arr] (s2a) -- (s2b);
+\draw[arr] (s2b) -- (s2c);
+\draw[arr] (s2c) -- (s2d);
+\draw[arr] (s2d) -- (s2best);
+
+% Search space annotation
+\node[right=0.5cm of s2b, font=\tiny\itshape, text=cb1, align=left] {
+    Search space:\\
+    $k \in [5,80]$\\
+    $d' \in [5,100]$\\
+    $q \in [0,0.40]$\\
+    $r \in [0.01,0.90]$
+};
+
+\end{tikzpicture}
+\end{document}

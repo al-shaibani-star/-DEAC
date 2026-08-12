@@ -1,0 +1,25 @@
+{
+  "name": "Segmentation",
+  "n": 2310,
+  "rho": 6.797058187186572,
+  "aris": {
+    "Baseline": 0.44347628157790864,
+    "AMR-DE": 0.29964399760226146,
+    "EMR-CGC": 0.3821456481745428
+  },
+  "scores": {
+    "Baseline": 0.9367485252373922,
+    "AMR-DE": 0.9309890838675241,
+    "EMR-CGC": 0.9331027246947423
+  },
+  "C": {
+    "Baseline": 20,
+    "AMR-DE": 28,
+    "EMR-CGC": 24
+  },
+  "gate_pick": "Baseline",
+  "oracle_pick": "Baseline",
+  "gate_ari": 0.44347628157790864,
+  "oracle_ari": 0.44347628157790864,
+  "baseline_ari": 0.44347628157790864
+}

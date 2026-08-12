@@ -1,0 +1,86 @@
+\begin{table}[htbp]
+\centering
+\caption{Clustering performance on \textit{Segmentation}: Baseline vs.\ GWO--DE--NM Hybrid.}
+\label{tab:segmentation}
+\begin{tabular}{lcc}
+\toprule
+Metric & Baseline & Hybrid (GWO--DE--NM) \\
+\midrule
+ARI & $0.418 \pm 0.008$ & $\mathbf{0.418 \pm 0.008}$ \\
+NMI & $0.623 \pm 0.003$ & $\mathbf{0.623 \pm 0.003}$ \\
+ACC & $0.488 \pm 0.015$ & $\mathbf{0.488 \pm 0.015}$ \\
+SIL & $0.783 \pm 0.019$ & $\mathbf{0.783 \pm 0.019}$ \\
+MOD & $0.927 \pm 0.002$ & $\mathbf{0.927 \pm 0.002}$ \\
+\midrule
+$C$ & $21.4 \pm 1.2$ & $21.4 \pm 1.2$ \\
+Time (s) & $4.76 \pm 0.08$ & $4.76 \pm 0.08$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Fair comparison on \textit{Segmentation}: all methods use $k$ discovered by GWO--DE--NM.}
+\label{tab:fair_segmentation}
+\begin{tabular}{lcccc}
+\toprule
+Method & ARI & NMI & ACC & $C$ \\
+\midrule
+KMeans & $0.382 \pm 0.026$ & $0.564 \pm 0.012$ & $0.461 \pm 0.018$ & $21$ \\
+Spectral & $0.404 \pm 0.019$ & $0.602 \pm 0.010$ & $0.480 \pm 0.009$ & $21$ \\
+Agglomerative & $0.366 \pm 0.007$ & $0.553 \pm 0.011$ & $0.473 \pm 0.009$ & $21$ \\
+GMM & $0.070 \pm 0.140$ & $0.110 \pm 0.219$ & $0.087 \pm 0.174$ & $5$ \\
+HDBSCAN & $\mathbf{0.418 \pm 0.039}$ & $0.580 \pm 0.028$ & $0.487 \pm 0.032$ & $19$ \\
+\midrule
+Baseline & $0.418 \pm 0.008$ & $0.623 \pm 0.003$ & $0.488 \pm 0.015$ & $21.4$ \\
+GWO-only & $0.418 \pm 0.008$ & $0.623 \pm 0.003$ & $0.488 \pm 0.015$ & $21.4$ \\
+GWO--DE--NM & $0.418 \pm 0.008$ & $0.623 \pm 0.003$ & $0.488 \pm 0.015$ & $21.4$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{Upper bound comparison on \textit{Segmentation}: benchmarks use true $k$ (unfair advantage).}
+\label{tab:upper_segmentation}
+\begin{tabular}{lcccc}
+\toprule
+Method & ARI & NMI & ACC & $C$ \\
+\midrule
+KMeans (true $k$) & $0.377 \pm 0.063$ & $0.562 \pm 0.051$ & $0.521 \pm 0.044$ & $7$ \\
+Spectral (true $k$) & $0.243 \pm 0.000$ & $0.471 \pm 0.001$ & $0.460 \pm 0.000$ & $7$ \\
+Agglomerative (true $k$) & $0.195 \pm 0.021$ & $0.426 \pm 0.025$ & $0.416 \pm 0.014$ & $7$ \\
+GMM (true $k$) & $0.184 \pm 0.234$ & $0.239 \pm 0.296$ & $0.233 \pm 0.289$ & $3$ \\
+HDBSCAN (true $k$) & $0.418 \pm 0.039$ & $0.580 \pm 0.028$ & $0.487 \pm 0.032$ & $19$ \\
+\midrule
+GWO--DE--NM (auto $k$) & $\mathbf{0.418 \pm 0.008}$ & $\mathbf{0.623 \pm 0.003}$ & $\mathbf{0.488 \pm 0.015}$ & $21.4$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Computational complexity of the proposed GWO--DE--NM hybrid system on \textit{Segmentation}.}
+\label{tab:complexity_segmentation}
+\begin{tabular}{lll}
+\toprule
+Component & Complexity & Evaluations \\
+\midrule
+PCA (StandardScaler + PCA) & $\mathcal{O}(n * d * d')$ & 790,020 \\
+KNN (sklearn NearestNeighbors) & $\mathcal{O}(n * k * d')$ & 1,455,300 \\
+Edge Pruning (quantile-based) & $\mathcal{O}(n * k)$ & 80,850 \\
+Louvain Algorithm & $\mathcal{O}(n * log(n))$ & 25,410 \\
+Silhouette Score (sampled) & $\mathcal{O}(s^2 * d')$ & 2,880,000 \\
+Grey Wolf Optimizer (GWO) & $\mathcal{O}(W * I * F)$ & 36 fitness evaluations (on subsample n'=800) \\
+Differential Evolution (DE) & $\mathcal{O}(G * P * D * F)$ & ~160 fitness evaluations (on subsample n'=800) \\
+Nelder-Mead (Local Search) & $\mathcal{O}(M * F)$ & <=50 fitness evaluations (on subsample n'=800) \\
+3-Layer QualityGate & $\mathcal{O}(1)$ & 3 comparisons per seed \\
+Tiny Cluster Merging & $\mathcal{O}(n_tiny * C * d')$ & Depends on cluster sizes \\
+\midrule
+FULL BASELINE Pipeline & $\mathcal{O}(n * d * d')$ & ~2,245,320 \\
+\midrule
+FULL HYBRID Pipeline (GWO-DE-NM) & $\mathcal{O}(T * F + n * d * d')$ & ~246 fitness evals + full pipeline \\
+\bottomrule
+\end{tabular}
+\end{table}

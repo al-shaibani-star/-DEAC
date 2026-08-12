@@ -1,0 +1,25 @@
+{
+  "name": "Wine",
+  "n": 178,
+  "rho": 4.0,
+  "aris": {
+    "Baseline": 0.8024591068836742,
+    "AMR-DE": 0.7741763976704018,
+    "EMR-CGC": 0.7741763976704018
+  },
+  "scores": {
+    "Baseline": 0.9091156081817774,
+    "AMR-DE": 0.9102965923943597,
+    "EMR-CGC": 0.9102965923943597
+  },
+  "C": {
+    "Baseline": 3,
+    "AMR-DE": 3,
+    "EMR-CGC": 3
+  },
+  "gate_pick": "AMR-DE",
+  "oracle_pick": "Baseline",
+  "gate_ari": 0.7741763976704018,
+  "oracle_ari": 0.8024591068836742,
+  "baseline_ari": 0.8024591068836742
+}

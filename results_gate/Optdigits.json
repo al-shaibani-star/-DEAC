@@ -1,0 +1,25 @@
+{
+  "name": "Optdigits",
+  "n": 1797,
+  "rho": 5.994997914928745,
+  "aris": {
+    "Baseline": 0.8489721251641666,
+    "AMR-DE": 0.8477496618994893,
+    "EMR-CGC": 0.8464547223133192
+  },
+  "scores": {
+    "Baseline": 0.9424044393704902,
+    "AMR-DE": 0.9478121407918576,
+    "EMR-CGC": 0.9470494716193252
+  },
+  "C": {
+    "Baseline": 12,
+    "AMR-DE": 11,
+    "EMR-CGC": 11
+  },
+  "gate_pick": "AMR-DE",
+  "oracle_pick": "Baseline",
+  "gate_ari": 0.8477496618994893,
+  "oracle_ari": 0.8489721251641666,
+  "baseline_ari": 0.8489721251641666
+}
