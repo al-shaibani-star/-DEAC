@@ -23,6 +23,12 @@ The paper reports an **oracle upper bound** (per-dataset best engine) and
 separately characterizes the **deployable, label-free gate**, which recovers
 ~75% of the oracle's gain over the baseline (`Table tab:gate`).
 
+A follow-up investigation into **closing the oracle–deployable gap** — testing
+learned, stability, and consensus selectors — is documented in
+[`PHASE1_FINDINGS.md`](PHASE1_FINDINGS.md). The gap resists every standard
+label-free approach (best is a modest RandomForest, 57%→64%), confirming the
+internal–external misalignment is structural rather than a tuning artefact.
+
 ## Repository layout
 
 ```
@@ -33,6 +39,9 @@ run_deep_baselines.py   N2D / DEC / IDEC / DCN comparison
 run_autoc_baselines.py  fair classical baselines (auto-C selection)
 run_snn_vs_knn.py       SNN+Leiden vs KNN+Louvain ablation
 run_gate_vs_oracle.py   deployable-gate vs oracle-upper-bound experiment
+phase0_diagnostic.py    internal-metric vs ARI diagnostic (oracle-gap study)
+phase1_*.py             learned / stability / consensus selectors
+PHASE1_FINDINGS.md      write-up of the oracle-gap investigation
 build_*.py           result aggregators → paper/generated/*.tex
 paper/               DEAC_paper.tex + figures + generated tables
 results_*/           experiment outputs (JSON)
