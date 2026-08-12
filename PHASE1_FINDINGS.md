@@ -1,5 +1,7 @@
 # Closing the Oracle–Deployable QualityGate Gap — Investigation Findings
 
+> Merged to `main` via [PR #1](https://github.com/al-shaibani-star/-DEAC/pull/1) in commit [`f43ec7f`](https://github.com/al-shaibani-star/-DEAC/commit/f43ec7f19b4e9e53e306903749cb5b9d76a579ce).
+
 ## Problem
 
 The paper reports DEAC under two selection regimes:
