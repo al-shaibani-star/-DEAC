@@ -37,3 +37,6 @@ paper/test_ieee*.tex
 .DS_Store
 Thumbs.db
 
+
+# docx build intermediate
+paper/_deac_docx_build.tex
