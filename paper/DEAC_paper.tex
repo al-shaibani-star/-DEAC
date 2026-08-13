@@ -628,7 +628,7 @@ Table~\ref{tab:ablation} isolates the contribution of every DEAC component.
 
 \begin{table}[htbp]
 \centering
-\caption{Ablation study: mean ARI across 12 datasets.}
+\caption{Ablation study: mean ARI across 12 datasets under \emph{oracle} engine selection (upper bound; the deployable label-free gate is characterized in Table~\ref{tab:gate}).}
 \label{tab:ablation}
 \footnotesize
 \begin{tabular}{lcc}
@@ -640,7 +640,7 @@ UMAP Baseline (no optim.)          & 0.574 & +75.8\% \\
 PCA + DE                            & 0.504 & +54.6\% \\
 UMAP + DE (AMR-DE)                 & 0.521 & +59.8\% \\
 SNN + Leiden (EMR-CGC)             & 0.644 & +97.5\% \\
-EMR-CGC + Baseline gate            & 0.646 & +98.2\% \\
+EMR-CGC + Baseline (oracle sel.)  & 0.646 & +98.2\% \\
 \textbf{DEAC (full, +\,AMR-DE)}     & \textbf{0.649} & \textbf{+99.1\%} \\
 \bottomrule
 \end{tabular}
@@ -653,7 +653,7 @@ workhorse of the framework.
 (iii)~The optimization engine AMR-DE, used alone, is \emph{below} the UMAP
 baseline (0.521 vs.\ 0.574)---a direct consequence of the internal--external
 misalignment discussed in \S\ref{sec:disc}. (iv)~We report the marginal value
-of AMR-DE honestly: over an ensemble-plus-baseline arbitrator (0.646), the
+of AMR-DE honestly: over an ensemble-plus-baseline oracle (0.646), the
 optimization engine adds only $+0.003$ mean ARI (0.649), and it is the
 deciding output on just 2 of 12 datasets (COIL-20, ISOLET). Its contribution
 is therefore narrow; the framework's strength comes from the ensemble and the
@@ -665,7 +665,7 @@ are only useful if the method remains affordable.
 \begin{figure}[!t]
 \centering
 \includegraphics[width=0.95\columnwidth]{figures/cross_dataset/phase_waterfall.png}
-\caption{Phase-by-phase contribution to mean ARI, averaged over 12 datasets. Starting from the PCA baseline (0.326), UMAP representation adds +0.248, SNN with Leiden community detection adds +0.070, and QualityGate arbitration adds +0.005, for a DEAC mean ARI of 0.649---a total gain of 99.1\,\% over the PCA baseline.}
+\caption{Phase-by-phase contribution to mean ARI, averaged over 12 datasets. Starting from the PCA baseline (0.326), UMAP representation adds +0.248, SNN with Leiden community detection adds +0.070, and oracle engine selection adds +0.005 (an upper bound; the deployable label-free gate is characterized in Table~\ref{tab:gate}), for a DEAC mean ARI of 0.649---a total gain of 99.1\,\% over the PCA baseline.}
 \label{fig:phase_waterfall}
 \end{figure}
 
@@ -742,7 +742,7 @@ SNN weighting is not a uniform win, and it is worth being precise about where it
 \subsection{Limitations}
 
 (i)~\emph{Runtime.} EMR-CGC's 60-run ensemble is costlier than single-shot methods, though it stays under 60\,s per dataset in our experiments.
-(ii)~\emph{Internal--external gap.} The QualityGate decides on internal metrics (MOD, SIL, BAL), which do not align perfectly with ARI; this is why on 2 of 12 datasets (Wine, Optdigits) DEAC keeps the baseline rather than improving on it.
+(ii)~\emph{Internal--external gap.} The QualityGate decides on internal metrics (MOD, SIL, BAL), which do not align perfectly with ARI, so the deployable gate is not strictly monotone over the baseline---on Wine it prefers AMR-DE on internal grounds and loses $0.028$ ARI (Table~\ref{tab:gate}).
 (iii)~\emph{Scalability.} SNN is $\mathcal{O}(n k^2)$, so very large $n$ ($>50{,}000$) would require approximate-NN construction.
 (iv)~\emph{Oracle vs.\ deployable gap.} The main-table DEAC is an oracle upper bound; the deployable label-free gate recovers $75\%$ of its gain over the baseline and sits modestly below N2D (Table~\ref{tab:gate}). Closing this gap with better internal proxies for external quality---or a learned representation in the RepScan stage---is the primary open problem.
 

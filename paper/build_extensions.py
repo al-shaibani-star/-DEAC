@@ -407,11 +407,11 @@ def fig_phase_waterfall():
       PCA Baseline          -> 0.326
       +UMAP representation  -> 0.574  (+0.248)
       +SNN + Leiden         -> 0.644  (+0.070)
-      +QualityGate arbitr.  -> 0.649  (+0.005)   = DEAC
+      +Oracle engine sel.   -> 0.649  (+0.005)   = DEAC (upper bound)
     """
     phases = ["PCA\nBaseline", "+ UMAP rep.",
               "+ SNN + Leiden\n(EMR-CGC)",
-              "+ QualityGate\n(DEAC)"]
+              "+ Oracle sel.\n(DEAC)"]
     start_val = 0.326
     deltas = [0.248, 0.070, 0.005]     # positive increments
     finals = [start_val]
