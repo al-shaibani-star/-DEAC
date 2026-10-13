@@ -46,3 +46,6 @@ external/
 
 # ── Keep the reproducibility matrix despite the *.csv rule (R1.9 artifact) ──
 !paper/generated_canonical/canonical_matrix.csv
+
+# redundant build-artifact archives
+*.zip
