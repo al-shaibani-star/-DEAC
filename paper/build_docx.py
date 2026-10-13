@@ -34,9 +34,37 @@ def expand(path, depth=0):
             lines_out.append(line)
     return lines_out
 
-with open(OUT, "w", encoding="utf-8") as f:
-    f.writelines(expand(SRC))
+def resolve_citations(text):
+    """pandoc drops \\cite and does not number a manual thebibliography, so the
+    Word export loses every in-text citation and the reference numbers. Resolve
+    both here: map each \\bibitem to a sequential number, rewrite \\cite{...} to
+    [n] / [n, m, ...], and replace the thebibliography with a numbered, headed
+    \\section*{References} list that pandoc renders cleanly."""
+    m = re.search(r"\\begin\{thebibliography\}\{[^}]*\}(.*?)\\end\{thebibliography\}",
+                  text, re.S)
+    if not m:
+        return text
+    parts = re.split(r"\\bibitem\{([^}]+)\}", m.group(1))
+    keymap, refs = {}, []
+    for i in range(1, len(parts), 2):
+        key = parts[i].strip()
+        content = re.sub(r"\s+", " ", parts[i + 1]).strip()
+        keymap[key] = len(refs) + 1
+        refs.append((keymap[key], content))
+    newbib = ("\n\\section*{References}\n\n"
+              + "\n\n".join(f"[{n}]~{c}" for n, c in refs) + "\n")
+    text = text[:m.start()] + newbib + text[m.end():]
 
-n_inp = sum(1 for _ in open(OUT, encoding="utf-8") if _.strip().startswith("\\input{"))
+    def repl(mm):
+        nums = [keymap.get(k.strip()) for k in mm.group(1).split(",")]
+        return "[" + ", ".join(str(x) for x in nums if x is not None) + "]"
+    return re.sub(r"\\cite\{([^}]+)\}", repl, text)
+
+
+flat = resolve_citations("".join(expand(SRC)))
+with open(OUT, "w", encoding="utf-8") as f:
+    f.write(flat)
+
+n_inp = sum(1 for ln in flat.splitlines() if ln.strip().startswith("\\input{"))
 print("wrote", OUT)
 print("remaining \\input lines:", n_inp)

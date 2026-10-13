@@ -80,13 +80,16 @@ def make_sectPr(num_cols, continuous):
 def main():
     doc = Document(SRC)
 
-    # --- defaults: Times New Roman 10pt body ---
-    for sname, size in [("Normal", 10), ("Body Text", 10), ("First Paragraph", 10)]:
+    # --- defaults: Times New Roman 11pt body (IJIES main-text spec) ---
+    for sname in ("Normal", "Body Text", "First Paragraph", "No Spacing"):
         try:
-            st = doc.styles[sname]; st.font.name = "Times New Roman"; st.font.size = Pt(size)
+            st = doc.styles[sname]; st.font.name = "Times New Roman"; st.font.size = Pt(11)
             st.element.rPr.rFonts.set(qn("w:cs"), "Times New Roman")
         except Exception:
             pass
+    # NOTE: body indentation/justification is applied per-paragraph below (over
+    # doc.paragraphs, which excludes table cells) -- NOT on the shared styles,
+    # which table cells also use and which a first-line indent would wreck.
 
     # black-out colored cross-reference hyperlinks (pandoc colors them)
     try:
@@ -114,17 +117,20 @@ def main():
 
     add(TITLE, 14, bold=True)
     add(AUTHOR, 11, bold=True)
-    add(AFFIL, 11, italic=True)
-    email_p = add(EMAIL, 10)
+    add(AFFIL, 11, italic=False)       # single-author affiliation: regular, not italic
+    email_p = add(EMAIL, 10.5)         # corresponding-author email: 10.5pt
     hrule(email_p)                 # line below author info (above abstract)
     ab = add("", 10, align=WD_ALIGN_PARAGRAPH.JUSTIFY)
     r = ab.add_run("Abstract: "); set_font(r, 10, bold=True)
     r = ab.add_run(ABSTRACT); set_font(r, 10)
-    kw = add("", 10, align=WD_ALIGN_PARAGRAPH.LEFT)
+    kw = add("", 10, align=WD_ALIGN_PARAGRAPH.JUSTIFY)
     r = kw.add_run("Keywords: "); set_font(r, 10, bold=True)
     r = kw.add_run(KEYWORDS); set_font(r, 10)
     hrule(kw)                      # line below keywords closes the title block
-    rule_p = kw                    # the 1-col section ends at the keywords paragraph
+    # one blank line after the rule, before Introduction (template requirement);
+    # it also carries the section break, so the keywords' last line is not
+    # force-justified by an adjacent section break.
+    rule_p = add("", 10)
 
     # --- delete OLD front matter (original paras 0-4: Title..Keywords) ---
     for p in list(doc.paragraphs):
@@ -135,20 +141,41 @@ def main():
             p._p.getparent().remove(p._p)
 
     # --- number + restyle section headings ---
+    # back-matter statements (Conflicts of Interest, Author Contributions,
+    # Acknowledgments, References) are first-order headings but stay UNnumbered.
+    UNNUMBERED = {"conflicts of interest", "conflict of interest",
+                  "author contributions", "acknowledgments", "acknowledgements",
+                  "references", "code and data availability"}
     h1 = 0
     for p in doc.paragraphs:
         sn = p.style.name
         if sn == "Heading 1":
-            h1 += 1
             txt = p.text
-            p.clear(); run = p.add_run(f"{h1}.  {txt}"); set_font(run, 12, bold=True)
-            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            if txt.strip().lower() in UNNUMBERED:
+                p.clear(); run = p.add_run(txt); set_font(run, 12, bold=True)
+                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            else:
+                h1 += 1
+                p.clear(); run = p.add_run(f"{h1}.  {txt}"); set_font(run, 12, bold=True)
+                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
         elif sn == "Heading 2":
             txt = p.text
             p.clear(); run = p.add_run(txt); set_font(run, 11, bold=True)
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
         elif sn == "Heading 3":
             txt = p.text
-            p.clear(); run = p.add_run(txt); set_font(run, 10, bold=True, italic=True)
+            p.clear(); run = p.add_run(txt); set_font(run, 10, bold=True)
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+    # --- body paragraphs: first-line indent 16.5pt, justified, no spacing ---
+    # doc.paragraphs yields only body-flow paragraphs (never table cells), so this
+    # leaves table cells, the Normal-styled front matter, captions and headings alone.
+    for p in doc.paragraphs:
+        if p.style.name in ("Body Text", "First Paragraph"):
+            pf = p.paragraph_format
+            pf.first_line_indent = Pt(16.5)
+            pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            pf.space_before = Pt(0); pf.space_after = Pt(0); pf.line_spacing = 1.0
 
     # --- number the figure/table legends serially (reviewer requirement) ---
     # pandoc drops the "Figure N." / "Table N." prefix; the in-text references
@@ -158,21 +185,36 @@ def main():
     for p in doc.paragraphs:
         sn = p.style.name
         if sn == "Image Caption":
-            fig_n += 1; prefix = f"Figure {fig_n}. "
+            fig_n += 1; prefix = f"Fig. {fig_n}. "
         elif sn == "Table Caption":
             tab_n += 1; prefix = f"Table {tab_n}. "
         else:
             continue
         if not p.text.strip():
             continue
+        # caption spec: 10pt Times New Roman, regular, centered
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        for r in p.runs:
+            set_font(r, 10)
         run = p.add_run(prefix)                 # created at end, then moved to front
-        set_font(run, 9, bold=True)
+        set_font(run, 10)
         p._p.remove(run._r)
         pPr_el = p._p.find(qn("w:pPr"))
         if pPr_el is not None:
             pPr_el.addnext(run._r)
         else:
             p._p.insert(0, run._r)
+
+    # --- reference list: hanging indent so the [N] label sits at the margin ---
+    in_refs = False
+    for p in doc.paragraphs:
+        if p.style.name == "Heading 1":
+            in_refs = (p.text.strip().lower() == "references")
+            continue
+        if in_refs and p.text.strip():
+            pf = p.paragraph_format
+            pf.first_line_indent = Pt(-18)
+            pf.left_indent = Pt(18)
 
     # --- sections: title block single-col, body two-col ---
     # final (doc) sectPr -> 2 columns
