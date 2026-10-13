@@ -1,0 +1,24 @@
+{
+  "name": "Satimage",
+  "seed": 1003,
+  "n": 6430,
+  "C_true": 6,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.11117287766445995,
+      "C": 2
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.48858365985607755,
+      "C": 12
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.422594211770287,
+      "C": 13
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.4269304459031018,
+      "C": 12
+    }
+  }
+}

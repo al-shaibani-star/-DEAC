@@ -1,0 +1,24 @@
+{
+  "name": "Olivetti",
+  "seed": 1004,
+  "n": 400,
+  "C_true": 40,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.0,
+      "C": 1
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.0725450243543966,
+      "C": 5
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.07208830003362642,
+      "C": 5
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.09792168557328425,
+      "C": 5
+    }
+  }
+}

@@ -76,6 +76,17 @@ def make_representation(X: Any, seed: int, dr_dim: int,
     # ---- UMAP ----
     if effective_rep == "umap":
         try:
+            # Stub out umap.parametric_umap before importing umap: that submodule
+            # pulls in TensorFlow at import time and can raise RuntimeError in some
+            # environments. We never use ParametricUMAP, so this keeps core UMAP
+            # (identical behaviour) without touching TensorFlow.
+            import sys as _sys
+            import types as _types
+            if "umap.parametric_umap" not in _sys.modules:
+                _stub = _types.ModuleType("umap.parametric_umap")
+                _stub.ParametricUMAP = None
+                _stub.load_ParametricUMAP = None
+                _sys.modules["umap.parametric_umap"] = _stub
             import umap
 
             # PCA pre-reduction for speed

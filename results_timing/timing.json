@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Wine",
+    "n": 178,
+    "seconds": 28.9,
+    "peak_mb": 626.0
+  },
+  {
+    "name": "MFeat",
+    "n": 2000,
+    "seconds": 101.5,
+    "peak_mb": 700.0
+  },
+  {
+    "name": "USPS",
+    "n": 9298,
+    "seconds": 200.0,
+    "peak_mb": 1831.0
+  }
+]

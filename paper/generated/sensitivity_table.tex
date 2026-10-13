@@ -1,0 +1,18 @@
+% R2.2 gate sensitivity (analyze_sensitivity.py)
+\begin{table}[htbp]
+\centering
+\caption{QualityGate sensitivity (12 datasets, 5 seeds). Mean ARI as each constant varies around its default (floor~4, $c{=}50$, weights .40/.35/.25); the gate is near-constant across the rho-guard ranges and insensitive to the score weights (only a degenerate modularity-only weighting fails). Tuning the weights on a 6-dataset development split and evaluating on the disjoint six recovers 41\% of the oracle's gain versus 65\% for the fixed default (-24 points), so the constants are not fitted to these benchmarks.}
+\label{tab:sensitivity}
+\footnotesize
+\begin{tabular}{lcc}
+\toprule
+Varied constant & Range tested & Mean ARI \\
+\midrule
+rho floor & 2--6 & 0.617--0.624 \\
+scaling $c$ & 25--150 & 0.624--0.624 \\
+score weights & full simplex & 0.571--0.627 \\
+\midrule
+\textbf{Default} (floor~4, $c{=}50$) & --- & \textbf{0.624} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,24 @@
+{
+  "name": "MFeat",
+  "seed": 1001,
+  "n": 2000,
+  "C_true": 10,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.6206188223492964,
+      "C": 6
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.9210021960016449,
+      "C": 12
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.9210021960016449,
+      "C": 12
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.8920890425003232,
+      "C": 12
+    }
+  }
+}

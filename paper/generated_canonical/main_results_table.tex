@@ -1,0 +1,28 @@
+% canonical; DEAC = deployable gate; Oracle = diagnostic upper bound
+\begin{table}[!t]
+\centering
+\caption{Main results: mean ARI over 5 seeds (1001--1005), full data. \textbf{DEAC} is the \emph{deployable} label-free QualityGate; \emph{Oracle} is the label-selected best engine per dataset (a diagnostic upper bound, not a deployable result). Bold = best \emph{deployable} value per row.}
+\label{tab:main_results}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+Dataset & Baseline & AMR-DE & EMR-CGC & \textbf{DEAC} & \textit{Oracle} \\
+\midrule
+Wine & $\mathbf{0.802}$ & 0.774 & 0.797 & 0.791 & \textit{0.802} \\
+Glass & 0.123 & 0.165 & 0.165 & $\mathbf{0.169}$ & \textit{0.172} \\
+Olivetti & 0.063 & 0.237 & $\mathbf{0.337}$ & 0.237 & \textit{0.337} \\
+CNAE-9 & 0.593 & 0.584 & 0.638 & $\mathbf{0.642}$ & \textit{0.642} \\
+COIL-20 & 0.631 & $\mathbf{0.788}$ & 0.754 & 0.754 & \textit{0.789} \\
+Optdigits & $\mathbf{0.861}$ & 0.845 & 0.848 & 0.848 & \textit{0.861} \\
+MFeat & 0.926 & 0.903 & $\mathbf{0.939}$ & $\mathbf{0.939}$ & \textit{0.939} \\
+Segment. & $\mathbf{0.425}$ & 0.344 & 0.387 & 0.413 & \textit{0.437} \\
+ISOLET & 0.460 & $\mathbf{0.514}$ & 0.476 & 0.476 & \textit{0.516} \\
+Satimage & 0.462 & 0.318 & 0.516 & $\mathbf{0.525}$ & \textit{0.541} \\
+USPS & 0.858 & 0.669 & $\mathbf{0.900}$ & 0.871 & \textit{0.900} \\
+PenDigits & 0.759 & 0.617 & $\mathbf{0.819}$ & 0.811 & \textit{0.819} \\
+\midrule
+\textbf{Mean} & 0.580 & 0.563 & 0.631 & \textbf{0.623} & \textit{0.646} \\
+\bottomrule
+\end{tabular}
+\end{table}

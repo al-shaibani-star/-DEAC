@@ -410,10 +410,10 @@ def fig_phase_waterfall():
       +Oracle engine sel.   -> 0.649  (+0.005)   = DEAC (upper bound)
     """
     phases = ["PCA\nBaseline", "+ UMAP rep.",
-              "+ SNN + Leiden\n(EMR-CGC)",
-              "+ Oracle sel.\n(DEAC)"]
+              "+ SNN+Leiden\n(EMR-CGC)",
+              "+ QualityGate\n(DEAC)"]
     start_val = 0.326
-    deltas = [0.248, 0.070, 0.005]     # positive increments
+    deltas = [0.254, 0.051, -0.008]    # canonical: gate reduces ARI vs EMR-CGC
     finals = [start_val]
     for d in deltas:
         finals.append(finals[-1] + d)

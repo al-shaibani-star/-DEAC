@@ -1,0 +1,24 @@
+% canonical gate-vs-comparator Wilcoxon + Holm
+\begin{table}[htbp]
+\centering
+\caption{Two-tailed Wilcoxon signed-rank tests of the \emph{deployable} DEAC gate vs.\ each comparator over 12 datasets, Holm--Bonferroni corrected across the nine tests. $\checkmark$ marks a Holm-significant DEAC advantage.}
+\label{tab:stats}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llccc}
+\toprule
+Comparison & Type & $p$ & $p_{\text{Holm}}$ & Sig. \\
+\midrule
+DEAC vs KMeans & classical & 0.034 & 0.205 & $\times$ \\
+DEAC vs Spectral & classical & 0.000 & 0.004 & $\checkmark$ \\
+DEAC vs Agglomerative & classical & 0.151 & 0.303 & $\times$ \\
+DEAC vs GMM & classical & 0.052 & 0.261 & $\times$ \\
+DEAC vs HDBSCAN & classical & 0.000 & 0.004 & $\checkmark$ \\
+\midrule
+DEAC vs N2D & deep & 0.733 & 0.733 & $\times$ \\
+DEAC vs DEC & deep & 0.064 & 0.261 & $\times$ \\
+DEAC vs IDEC & deep & 0.064 & 0.261 & $\times$ \\
+DEAC vs DCN & deep & 0.027 & 0.188 & $\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}

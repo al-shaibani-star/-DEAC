@@ -1,0 +1,24 @@
+{
+  "name": "Glass",
+  "seed": 1001,
+  "n": 214,
+  "C_true": 6,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.0,
+      "C": 1
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.10396108031937656,
+      "C": 3
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.16808695698594409,
+      "C": 4
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.1320116665125541,
+      "C": 3
+    }
+  }
+}

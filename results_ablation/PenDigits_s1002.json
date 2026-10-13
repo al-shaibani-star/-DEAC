@@ -1,0 +1,24 @@
+{
+  "name": "PenDigits",
+  "seed": 1002,
+  "n": 10992,
+  "C_true": 10,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.816985902007855,
+      "C": 13
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.772053242528382,
+      "C": 27
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.7330053073179925,
+      "C": 29
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.6917820802124108,
+      "C": 24
+    }
+  }
+}

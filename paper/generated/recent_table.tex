@@ -1,0 +1,21 @@
+% R2.4 recent-methods comparison (analyze_recent.py)
+\begin{table}[htbp]
+\centering
+\caption{Comparison with recent methods (mean ARI over 12 datasets). DPC-AKNN and PRCut, like the deep baselines, are given the true cluster count; our gate and EMR-CGC infer it. PRCut is run on the same UMAP representation (common-representation comparison); DPC-AKNN uses its native raw-feature geodesic pipeline (stratified cap 2000, its $O(n^3)$ cost). Our label-free method is on par with PRCut and N2D and well above DPC-AKNN, without being told $C$.}
+\label{tab:recent}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcc}
+\toprule
+Method & Representation & Given $C$? & Mean ARI \\
+\midrule
+\textbf{DEAC gate (ours)} & UMAP+SNN ensemble & no (infers $C$) & \textbf{0.623} \\
+EMR-CGC (ours) & UMAP+SNN ensemble & no (infers $C$) & 0.631 \\
+PRCut (2025)~\cite{ghriss2025prcut} & common UMAP & yes & 0.631 \\
+DPC-AKNN (2026)~\cite{wang2026density} & native (raw+geodesic) & yes & 0.420 \\
+\midrule
+N2D (deep)~\cite{mcconville2021n2d} & autoencoder+UMAP & yes & 0.642 \\
+\textit{Oracle (upper bound)} & --- & uses labels & \textit{0.646} \\
+\bottomrule
+\end{tabular}
+\end{table}

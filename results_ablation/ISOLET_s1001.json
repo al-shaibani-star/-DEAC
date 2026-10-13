@@ -1,0 +1,24 @@
+{
+  "name": "ISOLET",
+  "seed": 1001,
+  "n": 6006,
+  "C_true": 26,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.17275496725527845,
+      "C": 8
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.47267753933902545,
+      "C": 24
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.4820403150889368,
+      "C": 23
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.4771524361864374,
+      "C": 21
+    }
+  }
+}

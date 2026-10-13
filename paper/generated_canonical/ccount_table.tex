@@ -1,0 +1,29 @@
+% canonical cluster counts (deployable gate)
+\begin{table}[!t]
+\centering
+\caption{Predicted cluster count (mean over 5 seeds) vs.\ ground truth. DEAC is the deployable gate's selected engine; recovering the right granularity without labels is itself hard (part of the misalignment). Best (closest to $C_{\text{true}}$) in bold.}
+\label{tab:ccount}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccccc}
+\toprule
+Dataset & $C_{\text{true}}$ & Baseline & AMR-DE & EMR-CGC & \textbf{DEAC} \\
+\midrule
+Wine & 3 & \textbf{3} & \textbf{3} & \textbf{3} & \textbf{3} \\
+Glass & 6 & \textbf{3} & 10 & 9 & 9 \\
+Olivetti & 40 & 5 & 13 & \textbf{19} & 13 \\
+CNAE-9 & 9 & 10 & 15 & \textbf{9} & 10 \\
+COIL-20 & 20 & 15 & \textbf{21} & 16 & 16 \\
+Optdigits & 10 & 13 & 14 & \textbf{11} & \textbf{11} \\
+MFeat & 10 & 12 & 12 & \textbf{10} & \textbf{10} \\
+Segment. & 7 & 21 & 28 & 23 & \textbf{21} \\
+ISOLET & 26 & \textbf{23} & 32 & 22 & 22 \\
+Satimage & 6 & 13 & 29 & \textbf{10} & \textbf{10} \\
+USPS & 10 & 11 & 19 & \textbf{10} & 11 \\
+PenDigits & 10 & 26 & 34 & \textbf{20} & 21 \\
+\midrule
+\textbf{MAE} & --- & 7.53 & 10.57 & 5.25 & 5.77 \\
+\textbf{Exact} & --- & 1/12 & 1/12 & 4/12 & 2/12 \\
+\bottomrule
+\end{tabular}
+\end{table}

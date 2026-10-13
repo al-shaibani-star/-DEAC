@@ -40,3 +40,9 @@ Thumbs.db
 
 # docx build intermediate
 paper/_deac_docx_build.tex
+
+# ── Third-party cloned repos (not ours; has its own git/license) ──
+external/
+
+# ── Keep the reproducibility matrix despite the *.csv rule (R1.9 artifact) ──
+!paper/generated_canonical/canonical_matrix.csv

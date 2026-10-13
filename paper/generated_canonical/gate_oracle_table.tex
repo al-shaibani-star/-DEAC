@@ -1,0 +1,28 @@
+% canonical gate vs oracle
+\begin{table}[!t]
+\centering
+\caption{Deployable QualityGate (internal metrics, no labels) vs.\ the oracle upper bound, mean ARI over 5 seeds. $\Delta$ = oracle $-$ gate.}
+\label{tab:gate}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+\toprule
+Dataset & Gate ARI & Oracle ARI & $\Delta$ \\
+\midrule
+Wine & 0.791 & 0.802 & +0.011 \\
+Glass & 0.169 & 0.172 & +0.003 \\
+Olivetti & 0.237 & 0.337 & +0.101 \\
+CNAE-9 & 0.642 & 0.642 & +0.000 \\
+COIL-20 & 0.754 & 0.789 & +0.035 \\
+Optdigits & 0.848 & 0.861 & +0.013 \\
+MFeat & 0.939 & 0.939 & +0.000 \\
+Segment. & 0.413 & 0.437 & +0.024 \\
+ISOLET & 0.476 & 0.516 & +0.040 \\
+Satimage & 0.525 & 0.541 & +0.016 \\
+USPS & 0.871 & 0.900 & +0.029 \\
+PenDigits & 0.811 & 0.819 & +0.008 \\
+\midrule
+\textbf{Mean} & \textbf{0.623} & 0.646 & +0.023 \\
+\bottomrule
+\end{tabular}
+\end{table}

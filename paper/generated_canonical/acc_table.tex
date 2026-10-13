@@ -1,0 +1,26 @@
+% canonical per-dataset acc
+\begin{table}[htbp]
+\centering
+\caption{Per-dataset ACC (mean over 5 seeds). DEAC is the deployable gate.}
+\label{tab:acc_per_dataset}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+Dataset & Baseline & AMR-DE & EMR-CGC & \textbf{DEAC} \\
+\midrule
+Wine & $\mathbf{0.933}$ & 0.921 & 0.930 & 0.928 \\
+Glass & $\mathbf{0.489}$ & 0.336 & 0.334 & 0.336 \\
+Olivetti & 0.123 & 0.311 & $\mathbf{0.447}$ & 0.311 \\
+CNAE-9 & 0.752 & 0.670 & $\mathbf{0.779}$ & 0.777 \\
+COIL-20 & 0.752 & $\mathbf{0.833}$ & 0.790 & 0.790 \\
+Optdigits & 0.897 & 0.870 & 0.906 & $\mathbf{0.907}$ \\
+MFeat & 0.948 & 0.932 & $\mathbf{0.972}$ & $\mathbf{0.972}$ \\
+Segment. & $\mathbf{0.489}$ & 0.376 & 0.434 & 0.474 \\
+ISOLET & 0.528 & $\mathbf{0.553}$ & 0.545 & 0.544 \\
+Satimage & 0.541 & 0.391 & 0.614 & $\mathbf{0.626}$ \\
+USPS & 0.909 & 0.702 & $\mathbf{0.937}$ & 0.920 \\
+PenDigits & 0.735 & 0.586 & $\mathbf{0.808}$ & 0.798 \\
+\bottomrule
+\end{tabular}
+\end{table}

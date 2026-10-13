@@ -1,0 +1,17 @@
+% R2.3(a,b,c) controlled single-variable ablation
+\begin{table}[htbp]
+\centering
+\caption{Controlled single-variable ablation (mean ARI, 12 datasets, 5 seeds, same budget $k{=}35$, $r{=}0.25$). Each row changes exactly one component from the row above, so the $\Delta$ isolates that factor.}
+\label{tab:controlled}
+\footnotesize
+\begin{tabular}{llc}
+\toprule
+Configuration & Varied & Mean ARI ($\Delta$) \\
+\midrule
+PCA + KNN + Louvain & --- & 0.329 \\
+UMAP + KNN + Louvain & representation & 0.580 (+0.251) \\
+UMAP + KNN + Leiden & detector & 0.577 (-0.003) \\
+UMAP + SNN + Leiden & weighting & 0.567 (-0.010) \\
+\bottomrule
+\end{tabular}
+\end{table}

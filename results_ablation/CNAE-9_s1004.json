@@ -1,0 +1,24 @@
+{
+  "name": "CNAE-9",
+  "seed": 1004,
+  "n": 1080,
+  "C_true": 9,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.511518420258067,
+      "C": 6
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.5526374011955455,
+      "C": 9
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.5928354832132273,
+      "C": 8
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.6242936996109185,
+      "C": 9
+    }
+  }
+}

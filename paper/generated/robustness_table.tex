@@ -1,0 +1,33 @@
+% R2.5(c) robustness
+\begin{table}[htbp]
+\centering
+\caption{Robustness of the deployable gate on controlled synthetic data (mean ARI over 3 seeds; `base' is $n{=}2000$, $d{=}20$ all-informative, $C{=}10$, balanced, class-sep 1.0). The gate is robust to class imbalance, improves with cluster separation and with larger $n$, but degrades sharply under many irrelevant dimensions---a limitation noted in \S\ref{sec:disc}.}
+\label{tab:robustness}
+\footnotesize
+\begin{tabular}{llcc}
+\toprule
+Stress axis & Level & Gate ARI & Baseline ARI \\
+\midrule
+Imbalance & base & 0.515 & 0.413 \\
+ & 3$\times$ & 0.487 & 0.450 \\
+ & 10$\times$ & 0.605 & 0.605 \\
+ & 30$\times$ & 0.599 & 0.631 \\
+\midrule
+Separation & 0.5 & 0.059 & 0.059 \\
+ & 0.75 & 0.222 & 0.178 \\
+ & base & 0.515 & 0.413 \\
+ & 1.5 & 0.849 & 0.830 \\
+ & 2.0 & 0.966 & 0.966 \\
+\midrule
+Irrelevant dims & base & 0.515 & 0.413 \\
+ & +50 & 0.017 & 0.017 \\
+ & +200 & 0.002 & 0.002 \\
+ & +500 & 0.000 & 0.000 \\
+\midrule
+Sample size $n$ & 1000 & 0.324 & 0.229 \\
+ & base & 0.515 & 0.413 \\
+ & 5000 & 0.649 & 0.595 \\
+ & 10000 & 0.787 & 0.775 \\
+\bottomrule
+\end{tabular}
+\end{table}

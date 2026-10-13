@@ -1,0 +1,24 @@
+{
+  "name": "Segmentation",
+  "seed": 1001,
+  "n": 2310,
+  "C_true": 7,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.5474424929659474,
+      "C": 8
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.44347628157790864,
+      "C": 20
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.44347628157790864,
+      "C": 20
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.4510097309098586,
+      "C": 19
+    }
+  }
+}

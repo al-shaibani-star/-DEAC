@@ -1,0 +1,24 @@
+% canonical multi-metric means
+\begin{table}[!t]
+\centering
+\caption{Mean ARI/NMI/ACC across 12 datasets (5 seeds). DEAC is the deployable gate; the oracle row is a diagnostic upper bound.}
+\label{tab:multi_metric}
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+Method & Mean ARI & Mean NMI & Mean ACC \\
+\midrule
+Baseline (UMAP) & 0.580 & 0.720 & 0.675 \\
+AMR-DE & 0.563 & 0.727 & 0.623 \\
+EMR-CGC & 0.631 & 0.760 & 0.708 \\
+\textbf{DEAC (gate)} & \textbf{0.623} & \textbf{0.753} & \textbf{0.699} \\
+\textit{Oracle (upper bnd)} & 0.646 & 0.762 & 0.720 \\
+\midrule
+KMeans & 0.539 & 0.691 & 0.633 \\
+Spectral & 0.303 & 0.537 & 0.454 \\
+Agglomerative & 0.537 & 0.692 & 0.635 \\
+GMM & 0.546 & 0.691 & 0.636 \\
+HDBSCAN & 0.515 & 0.696 & 0.613 \\
+\bottomrule
+\end{tabular}
+\end{table}

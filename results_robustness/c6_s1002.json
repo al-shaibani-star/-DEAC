@@ -1,0 +1,21 @@
+{
+  "idx": 6,
+  "label": "separation 1.5",
+  "seed": 1002,
+  "n": 2000,
+  "d": 20,
+  "C_true": 10,
+  "ari": {
+    "Baseline": 0.8449492287242676,
+    "AMR-DE": 0.8487944991141478,
+    "EMR-CGC": 0.8786152931308755
+  },
+  "C": {
+    "Baseline": 10,
+    "AMR-DE": 10,
+    "EMR-CGC": 10
+  },
+  "gate_pick": "Baseline",
+  "gate_ari": 0.8449492287242676,
+  "oracle_ari": 0.8786152931308755
+}

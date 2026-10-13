@@ -1,0 +1,21 @@
+{
+  "idx": 8,
+  "label": "irrelevant d=70",
+  "seed": 1002,
+  "n": 2000,
+  "d": 70,
+  "C_true": 10,
+  "ari": {
+    "Baseline": 0.014583511281182016,
+    "AMR-DE": 0.0226107893755323,
+    "EMR-CGC": 0.022110541321372728
+  },
+  "C": {
+    "Baseline": 2,
+    "AMR-DE": 37,
+    "EMR-CGC": 36
+  },
+  "gate_pick": "Baseline",
+  "gate_ari": 0.014583511281182016,
+  "oracle_ari": 0.0226107893755323
+}

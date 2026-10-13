@@ -1,6 +1,7 @@
-\begin{table}[!t]
+% canonical per-dataset acc
+\begin{table}[htbp]
 \centering
-\caption{Per-dataset clustering accuracy (ACC) across 12 benchmarks. Bold = best. DEAC is the oracle $\max$(Baseline, AMR-DE, EMR-CGC)---an upper bound (cf.\ Table~\ref{tab:gate}).}
+\caption{Per-dataset ACC (mean over 5 seeds). DEAC is the deployable gate.}
 \label{tab:acc_per_dataset}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -8,21 +9,18 @@
 \toprule
 Dataset & Baseline & AMR-DE & EMR-CGC & \textbf{DEAC} \\
 \midrule
-Wine         & \textbf{0.910} & 0.890 & \textbf{0.910} & \textbf{0.910} \\
-Glass        & 0.465 & 0.455 & \textbf{0.510} & \textbf{0.510} \\
-Olivetti     & 0.322 & 0.410 & \textbf{0.560} & \textbf{0.560} \\
-CNAE-9       & 0.665 & 0.720 & \textbf{0.760} & \textbf{0.760} \\
-COIL-20      & 0.745 & \textbf{0.835} & 0.818 & \textbf{0.835} \\
-Optdigits    & \textbf{0.895} & 0.840 & 0.872 & \textbf{0.895} \\
-MFeat        & 0.940 & 0.948 & \textbf{0.957} & \textbf{0.957} \\
-Segment.     & 0.548 & 0.325 & \textbf{0.602} & \textbf{0.602} \\
-Satimage     & 0.552 & 0.428 & \textbf{0.678} & \textbf{0.678} \\
-ISOLET       & 0.608 & \textbf{0.645} & 0.625 & \textbf{0.645} \\
-USPS         & 0.893 & 0.620 & \textbf{0.895} & \textbf{0.895} \\
-PenDigits    & 0.792 & 0.625 & \textbf{0.840} & \textbf{0.840} \\
-\midrule
-\textbf{Mean} & 0.695 & 0.645 & 0.752 & \textbf{0.757} \\
-\textbf{Wins} & 2/12 & 2/12 & 9/12 & \textbf{12/12} \\
+Wine & $\mathbf{0.933}$ & 0.921 & 0.930 & 0.928 \\
+Glass & $\mathbf{0.489}$ & 0.336 & 0.334 & 0.336 \\
+Olivetti & 0.123 & 0.311 & $\mathbf{0.447}$ & 0.311 \\
+CNAE-9 & 0.752 & 0.670 & $\mathbf{0.779}$ & 0.777 \\
+COIL-20 & 0.752 & $\mathbf{0.833}$ & 0.790 & 0.790 \\
+Optdigits & 0.897 & 0.870 & 0.906 & $\mathbf{0.907}$ \\
+MFeat & 0.948 & 0.932 & $\mathbf{0.972}$ & $\mathbf{0.972}$ \\
+Segment. & $\mathbf{0.489}$ & 0.376 & 0.434 & 0.474 \\
+ISOLET & 0.528 & $\mathbf{0.553}$ & 0.545 & 0.544 \\
+Satimage & 0.541 & 0.391 & 0.614 & $\mathbf{0.626}$ \\
+USPS & 0.909 & 0.702 & $\mathbf{0.937}$ & 0.920 \\
+PenDigits & 0.735 & 0.586 & $\mathbf{0.808}$ & 0.798 \\
 \bottomrule
 \end{tabular}
 \end{table}

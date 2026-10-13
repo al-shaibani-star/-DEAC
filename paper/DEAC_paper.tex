@@ -105,33 +105,29 @@
 % ABSTRACT
 % ============================================================
 \begin{abstract}
-Clustering high-dimensional data without a known cluster count remains an
-open problem, and most graph-based methods inherit two weaknesses: they
-commit to a single data representation, and they trust the partition that
-maximizes an \emph{internal} quality score. We show that the second
-assumption is unsafe---optimizing internal objectives (modularity,
-silhouette) with a metaheuristic can \emph{degrade} external agreement
-(ARI) on the majority of datasets, because internal and external quality
-are misaligned. We therefore propose \textbf{DEAC} (Defensive Ensemble
-Adaptive Clustering), built around two ideas. First, \emph{EMR-CGC}, a
-multi-representation ensemble that runs Shared Nearest Neighbor (SNN)
-graphs with Leiden community detection across five representations and
-twelve configurations, then selects the best-scoring partition---turning
-representation choice from a fixed decision into an automatic one. Second,
-a three-layer adaptive \emph{QualityGate} that does not blindly trust any
-optimized candidate but \emph{arbitrates} among them, defaulting to a fixed
-baseline unless an engine scores higher on internal metrics. A complementary
-DE-optimized engine (AMR-DE) is added for the specific dataset regimes
-where parameter search helps. On 12 benchmarks ($n \in [178, 10992]$,
-$d \in [9, 4096]$) DEAC lifts mean ARI by 13.1\% over the baseline and---when
-every method must discover the cluster count itself---significantly
-outperforms five classical methods (KMeans, Spectral, Agglomerative, GMM,
-HDBSCAN) on 9 of 12 datasets (Holm-corrected Wilcoxon $p<0.05$; Friedman
-$p{<}0.001$). Against four
-modern deep-clustering methods (N2D, DEC, IDEC, DCN) that are each given the
-true cluster count, an oracle over DEAC's engines matches the strongest (N2D)
-while inferring the count itself; its label-free QualityGate is a deployable
-approximation that recovers 75\% of the oracle's gain over the baseline.
+Graph-based clustering of high-dimensional data without a known cluster count
+conventionally returns the partition that maximizes an \emph{internal} quality
+score such as modularity or silhouette. We show this standard practice is
+unsafe. Across twelve benchmarks, metaheuristically optimizing internal
+objectives \emph{degrades} external agreement: a differential-evolution engine
+that maximizes modularity and silhouette attains mean ARI $0.563$, \emph{below}
+an unoptimized UMAP+Louvain baseline ($0.580$), because internal and external
+quality are only weakly correlated (silhouette--ARI rank correlation
+${\approx}0.08$). We make this misalignment the object of study. Treating a
+label-aware oracle that selects the best engine per dataset as an upper bound
+(mean ARI $0.646$), we ask how much of it any \emph{label-free} rule can
+recover: a three-layer \emph{QualityGate} reaches $0.623$ ($65\%$ of the
+oracle's gain over the baseline), and across learned, stability, and consensus
+selectors the gap never closes (best $64\%$)---evidence that it is
+\emph{structural}, not a tuning artifact. The multi-representation SNN--Leiden
+ensemble the gate arbitrates (\emph{EMR-CGC}, $0.631$) is itself a competitive
+label-free method that infers the cluster count: after Holm correction it is
+statistically indistinguishable from strong classical baselines (KMeans, GMM,
+Agglomerative) and the DEC/IDEC/DCN deep methods, trailing only N2D ($0.642$)---
+so weak clustering is not the bottleneck; the inability to \emph{recognize} a
+good partition without labels is. We package these components as \textbf{DEAC}
+(Defensive Ensemble Adaptive Clustering) and release the full per-seed results
+(internal scores, cluster counts, and gate decisions) with every script for verification.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -156,27 +152,31 @@ Graph-based clustering addresses the first difficulty but inherits the other two
 \textbf{Contributions.} Building on that observation, we propose DEAC (Defensive Ensemble Adaptive Clustering). This paper makes four contributions:
 
 \begin{enumerate}
-\item \textbf{An internal--external misalignment result.} We give empirical
-evidence that metaheuristic optimization of internal clustering objectives
-can reduce external accuracy: our DE-optimized engine, despite maximizing
-modularity and silhouette, scores \emph{below} a fixed baseline in mean ARI
-(0.521 vs.\ 0.574). This motivates arbitration over blind trust.
+\item \textbf{An internal--external misalignment result (primary).} On twelve
+benchmarks, metaheuristically optimizing internal objectives \emph{reduces}
+external accuracy: our DE-optimized engine, despite maximizing modularity and
+silhouette, scores \emph{below} a fixed baseline in mean ARI (0.563 vs.\ 0.580),
+and silhouette barely tracks ARI (rank correlation ${\approx}0.08$). This
+reframes ``which partition scores best internally'' as the wrong question.
 
-\item \textbf{Multi-representation SNN ensemble (EMR-CGC).} Rather than
-committing to one representation, EMR-CGC selects the best-scoring partition
-across five representations $\times$ twelve SNN+Leiden configurations, lifting
-mean ARI to 0.644 and automatically recovering the cluster count.
+\item \textbf{A quantified oracle--deployable gap.} We define a label-aware
+oracle (mean ARI 0.646) as an upper bound and measure how far label-free
+selection reaches: a three-layer QualityGate recovers $65\%$ of its gain over
+the baseline, and across learned, stability, and consensus selectors the best
+is $64\%$. The gap resists every standard label-free approach, indicating it is
+structural rather than a tuning artifact.
 
-\item \textbf{Adaptive QualityGate.} A three-layer, size-adaptive arbitrator
-that defaults to the baseline unless an engine scores higher on internal
-metrics, curbing---though not eliminating---the failures of any single
-optimized engine.
+\item \textbf{A competitive label-free, cluster-count-inferring ensemble
+(EMR-CGC).} A multi-representation SNN--Leiden ensemble (mean ARI 0.631) that is
+statistically on par with strong classical and deep baselines \emph{without}
+being given the cluster count---showing that the limitation is recognition, not
+clustering power. A complementary DE engine (AMR-DE) covers specific regimes.
 
-\item \textbf{A complementary optimization engine and empirical study.}
-AMR-DE adds coverage on the specific dataset regimes where parameter search
-pays off (e.g.\ well-separated, moderate-$C$ data). We evaluate on 12
-benchmarks with Wilcoxon, Friedman, and Nemenyi tests against five classical
-baselines.
+\item \textbf{Full reproducibility artifacts.} We release the per-seed results
+(internal scores, cluster counts, gate decisions) as a full-precision matrix, with
+every figure/table/test script, all generated from a single canonical run, and
+evaluate with Wilcoxon, Friedman, and Nemenyi tests against five classical and four
+deep baselines.
 \end{enumerate}
 
 The rest of the paper follows this order. Section~\ref{sec:related} surveys related work. Section~\ref{sec:method} details the DEAC framework. Section~\ref{sec:exp} reports the experiments. Section~\ref{sec:disc} discusses findings and limits; Section~\ref{sec:conc} concludes.
@@ -321,9 +321,13 @@ The QualityGate (Fig.~\ref{fig:qg}) is a three-layer adaptive filter that select
 
 Two design choices warrant justification: the form of the threshold $\rho$ and the use of SNN rather than KNN edges.
 
-\textbf{Why $\rho=\max(4,\sqrt{n/50})$.} Layer~1 must reject a partition only when its cluster count is implausibly large relative to the baseline. The number of clusters that can be \emph{statistically resolved} in a sample grows sublinearly with $n$: a classical rule of thumb places the maximum at $k_{\max}\approx\sqrt{n/2}$~\cite{mardia1979multivariate}. We therefore let the tolerated cluster-count ratio grow as $\sqrt{n}$ as well, so the gate's permissiveness tracks the rate at which genuine structure can appear. Writing the threshold as $\rho=\sqrt{n/c}$, the constant $c{=}50$ fixes the crossover with the floor at $n=50\cdot4^2=800$: below ${\sim}800$ samples the constant floor $\rho{=}4$ governs, above it the $\sqrt{n}$ term does (Table~\ref{tab:rho}). The floor of $4$ is deliberate---baselines routinely \emph{under}-segment (e.g.\ ISOLET baseline $C{=}8$ vs.\ $26$ true classes), so the gate must admit up to a $4\times$ increase to capture real fine structure, while still blocking the runaway fragmentation ($C_H\!\gg\!C_B$) that internal-metric optimization tends to produce. Layers~2--3 then catch the milder failure modes: moderate fragmentation paired with a negligible internal-score gain ($\Delta s<0.06$), and outright internal-quality regression. The thresholds are intentionally conservative; because the gate can only \emph{substitute the baseline}, an overly strict $\rho$ costs at most the engine's gain on a dataset, whereas an overly loose $\rho$ risks accepting a fragmented partition---an asymmetry that motivates erring toward the baseline.
+\textbf{Why $\rho=\max(4,\sqrt{n/50})$.} Layer~1 must reject a partition only when its cluster count is implausibly large relative to the baseline. The number of clusters that can be \emph{statistically resolved} in a sample grows sublinearly with $n$: a classical rule of thumb places the maximum at $k_{\max}\approx\sqrt{n/2}$~\cite{mardia1979multivariate}. We therefore let the tolerated cluster-count ratio grow as $\sqrt{n}$ as well, so the gate's permissiveness tracks the rate at which genuine structure can appear. Writing the threshold as $\rho=\sqrt{n/c}$, the constant $c{=}50$ fixes the crossover with the floor at $n=50\cdot4^2=800$: below ${\sim}800$ samples the constant floor $\rho{=}4$ governs, above it the $\sqrt{n}$ term does (Table~\ref{tab:rho}). The floor of $4$ is deliberate---baselines can severely \emph{under}-segment (e.g.\ Olivetti baseline $C{\approx}5$ vs.\ $40$ true classes), so the gate must admit a several-fold increase to capture real fine structure, while still blocking the runaway fragmentation ($C_H\!\gg\!C_B$) that internal-metric optimization tends to produce. Layers~2--3 then catch the milder failure modes: moderate fragmentation paired with a negligible internal-score gain ($\Delta s<0.06$), and outright internal-quality regression. The thresholds are intentionally conservative; because the gate can only \emph{substitute the baseline}, an overly strict $\rho$ costs at most the engine's gain on a dataset, whereas an overly loose $\rho$ risks accepting a fragmented partition---an asymmetry that motivates erring toward the baseline. In the deployable implementation evaluated throughout, the gate reduces to selecting, among $\rho$-eligible engines, the one with the highest internal score ($0.40\,\mathrm{MOD}+0.35\,\mathrm{SIL}+0.25\,\mathrm{BAL}$); the $\Delta s$ and regression checks are conservative safeguards that rarely bind on these datasets (\S\ref{sec:disc}), and the exact score normalizations, search bounds, integer rounding, graph bridging, and small-community merging are specified in the released reference implementation.
 
 \input{generated/rho_table.tex}
+
+\textbf{Are these constants fitted to the benchmarks?} A reasonable worry is that the gate's constants---the floor of $4$, the scaling $c{=}50$, and the score weights---were tuned on the very datasets we report. They were not, and Table~\ref{tab:sensitivity} shows why they need not be. Sweeping the rho floor ($2$--$6$) and $c$ ($25$--$150$) leaves mean ARI essentially unchanged (within $0.007$), and over the full weight simplex it stays in $[0.571, 0.627]$ with the default within $0.003$ of the best attainable; only a degenerate modularity-only weighting fails. More tellingly, \emph{tuning} the weights on a six-dataset development split and evaluating on the disjoint six recovers only $41\%$ of the oracle's gain---\emph{below} the $65\%$ of the fixed default. Fitting the constants to data therefore generalizes worse than leaving them fixed, so the defaults carry no label-dependent advantage.
+
+\input{generated/sensitivity_table.tex}
 
 \textbf{Why SNN over KNN.} In high dimension, pairwise Euclidean distances concentrate---the contrast between nearest and farthest neighbors vanishes---so raw-distance edge weights become unreliable~\cite{beyer1999nearest}. The SNN weight $w_{ij}=|N_k(i)\cap N_k(j)|/k$ depends only on the \emph{overlap of neighbor sets}, a rank-based quantity that is far more stable than absolute distance under this concentration, and shared-neighbor similarities are known to mitigate the curse of dimensionality directly~\cite{houle2010shared}. This motivates SNN for the high-dimensional representations in EMR-CGC's ensemble; consistent with the theory, its measured benefit is concentrated on the highest-dimensional datasets, while it is neutral-to-negative elsewhere (\S\ref{sec:disc}).
 
@@ -427,43 +431,13 @@ PenDigits    & 10992 & 16   & 10 & Handwriting \\
 
 \subsection{Evaluation Protocol}
 
-Three external validity indices are reported: Adjusted Rand Index (ARI)~\cite{hubert1985comparing}, Normalized Mutual Information (NMI)~\cite{strehl2002cluster}, and Clustering Accuracy (ACC)~\cite{yang2010image}. Unless noted, results are averaged over five fixed seeds ($1001$--$1005$) for reproducibility. DEAC is configured with AMR-DE ($G{=}8$, $P{=}20$, $R{=}2$) and EMR-CGC (60 base clusterings). The baseline is UMAP+Louvain with community-standard settings ($k{=}35$, $q{=}0.1$, resolution $0.25$)---a legitimate reference rather than a deliberately weakened one; indeed it is the single strongest engine on 1 of 12 datasets. With the protocol fixed, we turn to the headline results.
+Three external validity indices are reported: Adjusted Rand Index (ARI)~\cite{hubert1985comparing}, Normalized Mutual Information (NMI)~\cite{strehl2002cluster}, and Clustering Accuracy (ACC)~\cite{yang2010image}. Unless noted, results are averaged over five fixed seeds ($1001$--$1005$) for reproducibility. DEAC is configured with AMR-DE ($G{=}8$ generations, population $P{=}5$, $R{=}2$ restarts over the four hyperparameters $k,d',q,r$) and EMR-CGC (60 base clusterings). The baseline is UMAP+Louvain with community-standard settings ($k{=}35$, $q{=}0.1$, resolution $0.25$)---a legitimate reference rather than a deliberately weakened one; indeed it is the single strongest engine on 1 of 12 datasets. With the protocol fixed, we turn to the headline results.
 
 \subsection{Main Results}
 
-Table~\ref{tab:main_results} compares the Baseline, the two engines in isolation, and DEAC under \emph{oracle} engine selection---the per-dataset best-ARI engine, which is an upper bound on what the label-free QualityGate can achieve. This oracle attains the best or tied-best ARI on all 12 datasets by construction, with a mean ARI of 0.649 against 0.574 for the baseline (+13.1\%). How much of this upper bound the deployable gate actually recovers---selecting without ground-truth labels---is quantified in \S\ref{sec:disc} (Table~\ref{tab:gate}). Fig.~\ref{fig:main_results} presents the evaluation in four complementary views: the dataset landscape~(a), the per-dataset ARI comparison~(b), the QualityGate activation per dataset~(c), and a multi-metric improvement heatmap sorted by $\Delta$ARI~(d). Internal comparison aside, the next question is how DEAC fares against established competitors.
+Table~\ref{tab:main_results} reports the Baseline, the three engines, the deployable \textbf{DEAC} gate, and---for reference only---the label-aware oracle. The oracle (best engine per dataset, chosen with ground-truth labels) lifts mean ARI from $0.580$ to $0.646$, but it is unavailable at deployment. The label-free gate recovers $65\%$ of that gain ($0.623$); the ensemble alone (EMR-CGC, $0.631$) recovers $77\%$, so the gate's arbitration slightly \emph{lowers} mean ARI---a trade we examine in \S\ref{sec:disc}. Fig.~\ref{fig:main_results} shows the per-dataset picture and the gate's activation. The central question is how much of the oracle a label-free rule can recover; we first place DEAC against established competitors.
 
-\begin{table}[!t]
-\centering
-\caption{Main results. ARI across 12 datasets. Bold = best. DEAC here is the \emph{oracle} $\max$(Baseline, AMR-DE, EMR-CGC)---an upper bound; the deployable label-free gate is characterized in Table~\ref{tab:gate}.}
-\label{tab:main_results}
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccc}
-\toprule
-Dataset & Baseline & AMR-DE & EMR-CGC & \textbf{DEAC} \\
-\midrule
-Wine         & 0.802 & 0.774 & \textbf{0.802} & \textbf{0.802} \\
-Glass        & 0.150 & 0.147 & \textbf{0.174} & \textbf{0.174} \\
-Olivetti     & 0.076 & 0.183 & \textbf{0.342} & \textbf{0.342} \\
-CNAE-9       & 0.549 & 0.624 & \textbf{0.658} & \textbf{0.658} \\
-COIL-20      & 0.622 & \textbf{0.777} & 0.762 & \textbf{0.777} \\
-Optdigits    & \textbf{0.868} & 0.804 & 0.843 & \textbf{0.868} \\
-MFeat        & 0.904 & 0.919 & \textbf{0.937} & \textbf{0.937} \\
-Segment.     & 0.418 & 0.169 & \textbf{0.465} & \textbf{0.465} \\
-Satimage     & 0.439 & 0.277 & \textbf{0.591} & \textbf{0.591} \\
-ISOLET       & 0.457 & \textbf{0.498} & 0.473 & \textbf{0.498} \\
-USPS         & 0.861 & 0.533 & \textbf{0.865} & \textbf{0.865} \\
-PenDigits    & 0.736 & 0.550 & \textbf{0.810} & \textbf{0.810} \\
-\midrule
-\textbf{Mean} & 0.574 & 0.521 & 0.644 & \textbf{0.649} \\
-\textbf{Best$^\dagger$} & 2/12 & 2/12 & 9/12 & \textbf{12/12} \\
-\bottomrule
-\end{tabular}
-
-\vspace{2pt}
-{\footnotesize $^\dagger$\,Number of datasets where the method attains the row-maximum ARI (ties counted). DEAC is the per-dataset maximum of the three source engines by construction.}
-\end{table}
+\input{generated/main_results_table.tex}
 
 \begin{figure*}[!t]
 \centering
@@ -486,7 +460,7 @@ Table~\ref{tab:benchmarks} pits DEAC against five widely used clustering algorit
 
 \input{generated/autoc_comparison_table.tex}
 
-DEAC wins on 9 of 12 datasets and improves mean ARI by 10.3 points over the best classical method (GMM, 0.546). The gap is wider here than under a fixed-$C$ protocol because the classical methods must now also discover $C$, and frequently misjudge it---on Olivetti, silhouette selection collapses every baseline to $C{=}2$ (ARI ${\approx}0.01$) against the 40 true classes, whereas DEAC recovers them. Classical baselines are a weak bar, however; the sharper test is against modern deep clustering.
+The deployable DEAC gate (mean ARI $0.623$) is the best method on 7 of 12 datasets and exceeds the strongest classical baseline (GMM, 0.546) by $7.7$ points. Much of that margin comes from cases where silhouette-based $C$ selection fails outright---on Olivetti it collapses every classical baseline to $C{=}2$ (ARI ${\approx}0.01$) against the 40 true classes, whereas DEAC infers the count. Whether the aggregate advantage is statistically reliable is tested in \S\ref{sec:disc}; the sharper comparison is against modern deep clustering.
 
 \subsection{Comparison with Deep Clustering}
 
@@ -500,83 +474,66 @@ must still discover $C$. All four share a fully-connected autoencoder
 protocols. These are standard, un-tuned implementations: the weaker performers
 (DEC, IDEC), which self-train a KL objective, may trail architecture-specialized
 or per-dataset-tuned variants, so their scores should be read as a reasonable
-lower bound rather than each method's ceiling. Despite this handicap, DEAC attains the highest mean
-ARI (0.649 vs.\ 0.642 for the next-best, N2D) and the most per-dataset wins
-(6 of 12). Two patterns explain the rest. First, N2D---which, like DEAC, builds
-on UMAP---is a genuine rival, winning on the manifold-structured datasets
-Olivetti, COIL-20, Satimage, and USPS. Second, the embedded-clustering methods
-DEC, IDEC, and DCN are strong only on small, low-dimensional data (Wine, Glass)
-and collapse on high-dimensional inputs (e.g.\ ARI $0.069$ on CNAE-9), whereas
-DEAC remains stable across every regime. The headline, then, is not dominance
-but \emph{parity-without-supervision}: an oracle over DEAC's engines matches or
-exceeds methods that are told the answer, while inferring it. This comparison
-uses the oracle DEAC; its deployable label-free gate sits modestly below N2D
-(\S\ref{sec:disc}).
+lower bound rather than each method's ceiling. The deployable DEAC gate reaches
+mean ARI $0.623$ and wins on 5 of 12 datasets. It \emph{trails} N2D ($0.642$),
+which---like DEAC---builds on UMAP and is the strongest competitor, winning on
+the manifold-structured datasets Olivetti, COIL-20, Satimage, and USPS. The
+embedded-clustering methods DEC, IDEC, and DCN (mean ARI $0.481$, $0.481$,
+$0.470$) are strong only on small, low-dimensional data and degrade on
+high-dimensional inputs, where DEAC stays stable. Even the label-aware
+\emph{oracle} ($0.646$) only matches N2D---so no selection rule over DEAC's
+engines beats the strongest deep baseline. The honest headline is competitive,
+count-free performance, not dominance.
 
 \input{generated/deep_comparison_table.tex}
 
-A dataset-level statistical analysis (Table~\ref{tab:stats}) makes the
-nuance precise. After Holm--Bonferroni correction over the nine independent
-comparisons, DEAC significantly outperforms DCN, but its advantage over DEC
-and IDEC does not survive multiple-comparison correction ($p_{\text{Holm}}{=}0.08$).
-Against N2D the difference is \emph{not} significant ($p{=}0.62$): the two are
-statistically tied. We state this plainly---an oracle over DEAC's engines does
-not beat the strongest deep baseline, it equals it, and does so without being
-given the cluster count. The single-metric view may still hide trade-offs, so
-we extend the comparison to NMI and ACC.
+A dataset-level statistical analysis (Table~\ref{tab:stats}) makes the picture
+precise, and it is sobering. After Holm--Bonferroni correction over the nine
+comparisons, the deployable gate significantly exceeds only the two weakest
+baselines (Spectral and HDBSCAN, $p_{\text{Holm}}{=}0.004$). It is statistically
+\emph{indistinguishable} from KMeans, GMM, Agglomerative, DEC, IDEC, and DCN,
+and it trails N2D. We therefore claim competitive---not superior---performance;
+the contribution of this paper is diagnostic (the internal--external
+misalignment and the oracle--deployable gap), not a new state of the art. The
+single-metric view may hide trade-offs, so we extend the comparison to NMI and ACC.
+
+\subsection{Comparison with Recent Methods}
+
+We additionally compare against two recent clustering methods: DPC-AKNN~\cite{wang2026density}, a 2026 density-peak method with adaptive KNN and geodesic distance, and PRCut~\cite{ghriss2025prcut}, a 2025 probabilistic ratio-cut deep method. Both are given the true cluster count; PRCut is run on the \emph{same} UMAP representation as our engines (a controlled common-representation comparison) using the authors' released implementation, while DPC-AKNN uses its native raw-feature geodesic pipeline. Table~\ref{tab:recent} shows the deployable gate (0.623) and EMR-CGC (0.631) are on par with PRCut (0.631) and close to N2D (0.642), and well above DPC-AKNN (0.420)---while, unlike all three comparators, inferring the cluster count rather than being told it. Being competitive with the latest methods \emph{without} the count, not beating them, is the honest claim.
+
+\input{generated/recent_table.tex}
 
 \subsection{Multi-Metric Comparison}
 
-Table~\ref{tab:multi_metric} shows that DEAC leads on all three external validity indices, so the ARI advantage is not an artifact of a single measure. The per-dataset breakdown for NMI and ACC appears in Tables~\ref{tab:nmi_per_dataset}--\ref{tab:acc_per_dataset}, and the same values are plotted dataset-by-dataset in Fig.~\ref{fig:metric_bars_4way}. All five indices are then collapsed onto one radar plot in Fig.~\ref{fig:radar_4way}, where DEAC's polygon encloses every competitor on every axis.
+Table~\ref{tab:multi_metric} shows the ARI picture holds across NMI and ACC: the deployable gate is competitive with the strong classical baselines on all three external indices without dominating them. The per-dataset breakdown for NMI and ACC appears in Tables~\ref{tab:nmi_per_dataset}--\ref{tab:acc_per_dataset}, and the same values are plotted dataset-by-dataset in Fig.~\ref{fig:metric_bars_4way}; Fig.~\ref{fig:radar_4way} collapses the indices onto one radar plot.
 
-\begin{table}[htbp]
-\centering
-\caption{Multi-metric mean scores across 12 datasets. The DEAC row is the oracle upper bound; the deployable gate is characterized in Table~\ref{tab:gate}.}
-\label{tab:multi_metric}
-\footnotesize
-\begin{tabular}{lccc}
-\toprule
-Method & Mean ARI & Mean NMI & Mean ACC \\
-\midrule
-Baseline (UMAP) & 0.574 & 0.705 & 0.695 \\
-AMR-DE          & 0.521 & 0.668 & 0.645 \\
-EMR-CGC         & 0.644 & 0.760 & 0.752 \\
-\textbf{DEAC}   & \textbf{0.649} & \textbf{0.765} & \textbf{0.757} \\
-\midrule
-KMeans          & 0.539 & 0.691 & 0.633 \\
-Spectral        & 0.303 & 0.537 & 0.454 \\
-Agglomerative   & 0.537 & 0.692 & 0.635 \\
-GMM             & 0.546 & 0.691 & 0.636 \\
-HDBSCAN         & 0.515 & 0.696 & 0.613 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{generated/multi_metric_table.tex}
 
 \input{generated/nmi_table.tex}
 
 \input{generated/acc_table.tex}
 
-External indices say nothing about how well each method recovers the \emph{number} of clusters, which is the second axis along which DEAC must be judged. Table~\ref{tab:ccount} reports predicted cluster counts against the ground-truth $C_{\text{true}}$. DEAC attains the lowest mean absolute error and the highest exact-match rate, so the QualityGate inherits the cluster-count fidelity of whichever engine was selected on each dataset. Whether these per-dataset gains are statistically meaningful is the next question.
+External indices say nothing about how well each method recovers the \emph{number} of clusters. Table~\ref{tab:ccount} reports predicted counts against $C_{\text{true}}$, and here the deployable method is weak: the gate's mean absolute count error is large and it matches $C_{\text{true}}$ on only 2 of 12 datasets. Recovering the right granularity without labels is itself part of the internal--external misalignment, not a solved sub-problem---a point we return to in the discussion.
 
 \input{generated/ccount_table.tex}
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/cross_dataset/metric_bars_4way.png}
-\caption{Per-dataset comparison of ARI, NMI, and ACC across the four configurations (Baseline, AMR-DE, EMR-CGC, DEAC). Grouped bars make the ranking readable dataset by dataset; DEAC leads on 9 of 12 benchmarks across the three indices.}
+\caption{Per-dataset comparison of ARI, NMI, and ACC across the four configurations (Baseline, AMR-DE, EMR-CGC, DEAC). Grouped bars make the per-dataset ranking readable; the deployable gate (DEAC) tracks the strongest engine across all three indices without dominating.}
 \label{fig:metric_bars_4way}
 \end{figure*}
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=0.9\columnwidth]{figures/cross_dataset/radar_4way.png}
-\caption{Multi-axis radar comparison. The five axes are ARI, NMI, and ACC (external accuracy), plus C-acc (inverse normalised cluster-count error) and C-exact (fraction of datasets where $C_{\text{pred}}=C_{\text{true}}$). DEAC's polygon encloses every competitor on every axis.}
+\caption{Multi-axis comparison on four axes: ARI, NMI, ACC (external accuracy) and C-acc (an inverse normalised cluster-count error). The deployable gate (DEAC) tracks EMR-CGC on the external axes but is weaker on C-acc, reflecting its limited label-free cluster-count recovery.}
 \label{fig:radar_4way}
 \end{figure}
 
 \subsection{Statistical Significance}
 
-Valid inference compares DEAC only with \emph{independent} methods: because DEAC is the per-dataset maximum of its own three engines, testing it against the Baseline or AMR-DE is tautological (the differences are non-negative by construction), so we omit those. Over the nine independent competitors---five classical (auto-$C$ protocol of \S\ref{sec:exp}) and four deep---we run two-tailed Wilcoxon signed-rank tests with Holm--Bonferroni correction (Table~\ref{tab:stats}). After correction, DEAC significantly outperforms all five classical methods and the deep method DCN ($p_{\text{Holm}}<0.05$); its edge over DEC and IDEC does not survive correction ($p_{\text{Holm}}{=}0.08$), and it is statistically tied with N2D ($p{=}0.62$). A Friedman test over DEAC and the five classical baselines rejects equality ($\chi^2(5){=}34.0$, $p{<}0.001$), with DEAC taking the best average rank (1.58; Nemenyi CD${=}1.76$); since this uses the oracle DEAC, that rank is an upper bound the deployable gate would not fully reach. Beyond the numbers, the geometry of the resulting clusters is informative.
+We test the \emph{deployable} DEAC gate against the nine independent competitors---five classical (auto-$C$ protocol of \S\ref{sec:exp}) and four deep---with two-tailed Wilcoxon signed-rank tests and Holm--Bonferroni correction over the family of nine (Table~\ref{tab:stats}). The result is deliberately reported without euphemism: after correction, the gate significantly exceeds only Spectral and HDBSCAN ($p_{\text{Holm}}{=}0.004$); against KMeans, GMM, Agglomerative, DEC, IDEC, and DCN the difference does not reach significance, and the gate trails N2D by a small margin ($-0.019$ mean ARI, $95\%$ CI $[-0.079, +0.040]$; Wilcoxon $p{=}0.73$, Cohen's $d_z{=}{-0.18}$). Crucially, a failure to reject is \emph{not} equivalence: a two-one-sided-tests check does not establish equivalence to N2D even at a $\pm0.05$ ARI margin ($p{=}0.17$), so we claim neither superiority nor equivalence---only a small, statistically unresolved difference at this sample size. The deployable method is therefore \emph{competitive} with strong classical and deep baselines while uniquely inferring the cluster count---its value is not a higher score but the diagnostic lesson of \S\ref{sec:disc}. Beyond the numbers, the geometry of the resulting clusters is informative.
 
 \input{generated/stats_table.tex}
 
@@ -605,7 +562,7 @@ Fig.~\ref{fig:qualitative} shows t-SNE projections of DEAC clusters (top) and si
 
 \subsection{Optimization Dynamics}
 
-Fig.~\ref{fig:optim_dynamics} shows DE convergence curves and parameter exploration trajectories. Convergence occurs within 6--8 generations on most datasets. To separate the contribution of each component, we now ablate them.
+Fig.~\ref{fig:optim_dynamics} shows DE convergence curves and parameter exploration trajectories. Each restart converges within 6--8 generations; the trajectory axis concatenates the $R{=}2$ restarts (so it extends beyond generation~8) before Nelder--Mead refines the best candidate. The nominal evaluation budget is $R\cdot G\cdot P\cdot 4{\approx}320$ fitness evaluations (Table~\ref{tab:complexity}). To separate the contribution of each component, we now ablate them.
 
 \begin{figure}[!t]
 \centering
@@ -618,7 +575,7 @@ Fig.~\ref{fig:optim_dynamics} shows DE convergence curves and parameter explorat
 \includegraphics[width=0.45\columnwidth]{figures/COIL20/param_trajectory_COIL20.png} \\
 \scriptsize (c) Trajectory --- MFeat & \scriptsize (d) Trajectory --- COIL-20 \\
 \end{tabular}
-\caption{DE optimization dynamics: convergence curves (top) and parameter trajectories (bottom).}
+\caption{DE optimization dynamics: convergence curves (top) and parameter trajectories (bottom). The horizontal axis concatenates the $R{=}2$ restarts, so it runs past $G{=}8$ generations; Nelder--Mead then refines the best candidate.}
 \label{fig:optim_dynamics}
 \end{figure}
 
@@ -628,44 +585,55 @@ Table~\ref{tab:ablation} isolates the contribution of every DEAC component.
 
 \begin{table}[htbp]
 \centering
-\caption{Ablation study: mean ARI across 12 datasets under \emph{oracle} engine selection (upper bound; the deployable label-free gate is characterized in Table~\ref{tab:gate}).}
+\caption{Ablation: mean ARI across 12 datasets (canonical, 5 seeds). DEAC is the deployable gate; the oracle is the label-aware upper bound.}
 \label{tab:ablation}
 \footnotesize
 \begin{tabular}{lcc}
 \toprule
 Configuration & Mean ARI & $\Delta$ vs.\ PCA \\
 \midrule
-PCA Baseline (no optim.)           & 0.326 & --- \\
-UMAP Baseline (no optim.)          & 0.574 & +75.8\% \\
-PCA + DE                            & 0.504 & +54.6\% \\
-UMAP + DE (AMR-DE)                 & 0.521 & +59.8\% \\
-SNN + Leiden (EMR-CGC)             & 0.644 & +97.5\% \\
-EMR-CGC + Baseline (oracle sel.)  & 0.646 & +98.2\% \\
-\textbf{DEAC (full, +\,AMR-DE)}     & \textbf{0.649} & \textbf{+99.1\%} \\
+PCA Baseline (no optim.)$^\ddagger$       & 0.326 & --- \\
+UMAP Baseline (no optim.)                 & 0.580 & +77.9\% \\
+UMAP + DE (AMR-DE)                         & 0.563 & +72.7\% \\
+SNN + Leiden (EMR-CGC)                     & 0.631 & +93.6\% \\
+\textbf{+ QualityGate (DEAC)}              & \textbf{0.623} & \textbf{+91.1\%} \\
+\textit{Oracle (upper bound)}             & \textit{0.646} & \textit{+98.2\%} \\
 \bottomrule
 \end{tabular}
+
+\vspace{2pt}
+{\footnotesize $^\ddagger$\,The PCA-stage value is from a preliminary single-seed run; a controlled single-variable ablation at matched budget is left to future work.}
 \end{table}
 
-Four effects stand out. (i)~Switching from PCA to UMAP is the single largest
-improvement (+75.8\%). (ii)~Adding SNN+Leiden (EMR-CGC) gains another 0.070
-in mean ARI over the UMAP baseline (0.644 vs.\ 0.574) and is the true
-workhorse of the framework.
-(iii)~The optimization engine AMR-DE, used alone, is \emph{below} the UMAP
-baseline (0.521 vs.\ 0.574)---a direct consequence of the internal--external
-misalignment discussed in \S\ref{sec:disc}. (iv)~We report the marginal value
-of AMR-DE honestly: over an ensemble-plus-baseline oracle (0.646), the
-optimization engine adds only $+0.003$ mean ARI (0.649), and it is the
-deciding output on just 2 of 12 datasets (COIL-20, ISOLET). Its contribution
-is therefore narrow; the framework's strength comes from the ensemble and the
-gate, with AMR-DE supplying complementary coverage where parameter search
-helps. Fig.~\ref{fig:phase_waterfall} stacks these increments as a waterfall,
-running from the PCA baseline to the full DEAC configuration. Accuracy gains
-are only useful if the method remains affordable.
+Four effects stand out. (i)~Representation matters most: moving from PCA to UMAP
+is the single largest improvement. (ii)~The SNN--Leiden ensemble (EMR-CGC) is the
+workhorse, reaching $0.631$---the best deployable mean ARI in the table.
+(iii)~The optimizer AMR-DE, used alone, falls \emph{below} the UMAP baseline
+($0.563$ vs.\ $0.580$)---a direct consequence of the internal--external
+misalignment discussed in \S\ref{sec:disc}. (iv)~The QualityGate's label-free
+arbitration does not add accuracy: it reaches $0.623$, \emph{below} EMR-CGC
+alone, trading a small mean-ARI cost for protection against the optimizer's worst
+single-engine failures. The framework's accuracy therefore comes from the
+ensemble; the gate is a safety mechanism, and the label-aware oracle ($0.646$)
+marks the ceiling any label-free selector would need to reach.
+Fig.~\ref{fig:phase_waterfall} stacks these increments as a waterfall.
+
+Because the progression above changes several factors at once, we also vary each
+component \emph{singly} at a matched budget (Table~\ref{tab:controlled}). The
+representation dominates---PCA$\to$UMAP adds $+0.251$ mean ARI---whereas switching
+the community detector (Louvain$\to$Leiden, $-0.003$) or the edge weighting
+(KNN$\to$SNN, $-0.010$) changes little on average. DEAC's accuracy therefore comes
+from the UMAP representation and the ensemble, not from Leiden or SNN \emph{per se};
+SNN's benefit is confined to the high-dimensional datasets (\S\ref{sec:disc}), so
+the ensemble gain cannot be attributed to SNN weighting alone. Accuracy gains are
+only useful if the method remains affordable.
+
+\input{generated/controlled_ablation_table.tex}
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=0.95\columnwidth]{figures/cross_dataset/phase_waterfall.png}
-\caption{Phase-by-phase contribution to mean ARI, averaged over 12 datasets. Starting from the PCA baseline (0.326), UMAP representation adds +0.248, SNN with Leiden community detection adds +0.070, and oracle engine selection adds +0.005 (an upper bound; the deployable label-free gate is characterized in Table~\ref{tab:gate}), for a DEAC mean ARI of 0.649---a total gain of 99.1\,\% over the PCA baseline.}
+\caption{Phase-by-phase contribution to mean ARI over 12 datasets. From the PCA baseline, UMAP representation and the SNN--Leiden ensemble (EMR-CGC) drive mean ARI to 0.631; the label-free QualityGate then \emph{reduces} it slightly to 0.623 (trading accuracy for safety), while the label-aware oracle marks the 0.646 upper bound.}
 \label{fig:phase_waterfall}
 \end{figure}
 
@@ -686,19 +654,22 @@ Component & Complexity & Typical Cost \\
 StandardScaler        & $\mathcal{O}(nd)$                   & linear \\
 PCA                   & $\mathcal{O}(nd \cdot d')$          & $\mathcal{O}(nd \cdot 40)$ \\
 UMAP                  & $\mathcal{O}(n^{1.14} d')$          & near-linear \\
-t-SNE                 & $\mathcal{O}(n^2)$                  & quadratic \\
+t-SNE (Barnes--Hut)   & $\mathcal{O}(n \log n)$             & near-linear$^\ast$ \\
 KNN graph             & $\mathcal{O}(nk \cdot d')$          & $\mathcal{O}(nk \cdot 40)$ \\
 SNN graph             & $\mathcal{O}(nk^2)$                 & $\mathcal{O}(n \cdot k^2)$ \\
 Leiden                & $\mathcal{O}(m \log n)$             & near-linear \\
-AMR-DE (all evals)    & $\mathcal{O}(E \cdot F_c)$          & $E{\approx}200$ \\
+AMR-DE (all evals)    & $\mathcal{O}(E \cdot F_c)$          & $E{=}RGP{\cdot}4{\approx}320$ \\
 EMR-CGC ensemble      & $\mathcal{O}(M|K||R| F_c)$          & $60 \cdot F_c$ \\
 \midrule
 \textbf{Total DEAC}   & $\mathcal{O}(n^{1.14} d' + n k^2)$  & sub-quadratic \\
 \bottomrule
 \end{tabular}
+
+\vspace{2pt}
+{\footnotesize $^\ast$\,t-SNE uses the Barnes--Hut approximation (output dimension ${\le}3$), which is $\mathcal{O}(n\log n)$; exact t-SNE would be $\mathcal{O}(n^2)$. The sub-quadratic total therefore holds for the implemented pipeline, with the $\mathcal{O}(nk^2)$ SNN term dominating.}
 \end{table}
 
-Measured end-to-end runtimes on an Intel~i7 CPU---Wine (178) 14\,s, MFeat (2000) 24\,s, USPS (9298) 45\,s---keep runtime practical even at the high end of our benchmarks.
+Measured end-to-end wall-clock for the full three-engine pipeline (single seed, one machine) is $29$\,s on Wine ($n{=}178$), $102$\,s on MFeat ($n{=}2000$), and $200$\,s on USPS ($n{=}9298$), with peak memory rising from $0.6$ to $1.8$\,GB. EMR-CGC's 60-run ensemble and the AMR-DE search dominate the cost, so runtime grows with $n$ but stays within a few minutes at the high end of our benchmarks.
 
 % ============================================================
 % 5. DISCUSSION
@@ -711,27 +682,30 @@ The results raise four follow-up questions: why arbitration rather than optimiza
 
 The most informative result in our study is a negative one. AMR-DE
 explicitly maximizes internal objectives (modularity, silhouette,
-Calinski--Harabasz), yet its mean ARI (0.521) falls \emph{below} the fixed
-baseline (0.574) and it collapses outright on several datasets
-(Segmentation 0.169, Satimage 0.277, USPS 0.533). Internal quality and
-external agreement are therefore misaligned: a partition can be ``better''
-by every internal score and worse by ARI. This is precisely why DEAC does
-not trust any single optimized candidate. The QualityGate instead
-\emph{arbitrates}: it keeps the optimization-based output only when it
-survives three conservative tests, and otherwise falls back to the
-ensemble or the baseline. The benefit of the optimization engine is thus
-narrow but real---it is the deciding output on only COIL-20 and ISOLET
-(well-separated, moderate-$C$ data where parameter search pays off),
-contributing $+0.003$ to the mean ARI over an ensemble-plus-baseline system
-(0.646 $\to$ 0.649). We report this small margin openly: AMR-DE is a
-complementary engine for specific regimes, not the workhorse. The workhorse
-is EMR-CGC (0.644), and the safety net is the gate---but that gate must choose
-without labels, which raises the question of how much of the label-aware oracle
-it can actually recover.
+Calinski--Harabasz), yet its mean ARI ($0.563$) falls \emph{below} the fixed
+baseline ($0.580$) and it collapses on several datasets (Satimage $0.318$,
+Segmentation $0.344$, PenDigits $0.617$). Internal quality and external
+agreement are therefore misaligned: a partition can be ``better'' by every
+internal score and worse by ARI. This is why DEAC does not trust any single
+optimized candidate; the QualityGate instead \emph{arbitrates}, keeping an
+engine only when it survives three conservative, label-free tests and otherwise
+falling back. Crucially, the \emph{same} misalignment that sinks AMR-DE also
+limits the gate: deciding by internal metrics, it reaches $0.623$---\emph{below}
+the ensemble it arbitrates (EMR-CGC, $0.631$). Arbitration is thus a
+\emph{defensive} mechanism that curbs the optimizer's worst losses, not an
+accuracy-maximizing one. A controlled selection-rule ablation
+(Table~\ref{tab:selection}) confirms this: removing the over-fragmentation guard
+leaves the gate essentially unchanged, dropping AMR-DE from the gate costs only
+${\sim}0.003$ mean ARI, and the trivial ``always-EMR-CGC'' policy ($0.631$) in
+fact exceeds the gate. The gate therefore buys robustness against catastrophic
+single-engine picks rather than higher mean accuracy. How much of the label-aware
+oracle any such label-free rule can recover is the central question.
+
+\input{generated/selection_ablation_table.tex}
 
 \subsection{How Much of the Oracle Is Deployable?}
 
-The main results (Table~\ref{tab:main_results}) select the best engine per dataset using ground-truth ARI---an oracle unavailable at deployment, where the QualityGate must choose from internal metrics alone. Table~\ref{tab:gate} quantifies the gap on the full data with our exact pipeline at a single seed; its absolute ARIs therefore differ marginally from the five-seed main tables (baseline $0.582$ vs.\ $0.574$), but the gap---not the absolute level---is the quantity of interest. The deployable gate reaches a mean ARI of $0.630$ against the oracle's $0.646$ and the baseline's $0.582$, recovering $75\%$ of the oracle's gain and agreeing with the oracle's engine choice on $6$ of $12$ datasets. The residual gap is a direct expression of the internal--external misalignment that motivates this work: the gate errs precisely where an engine is best by ARI but not by internal score, most visibly on ISOLET (where AMR-DE is secretly optimal) and Olivetti (where EMR-CGC is). The same mechanism means the gate is not strictly monotone over the baseline---on Wine it prefers AMR-DE on internal grounds and loses $0.028$ ARI. We therefore treat the oracle as an upper bound and the gate as the honest deployable performance, and regard closing their gap---better internal proxies for external quality---as the central open problem. The gate's ingredients invite the same scrutiny, beginning with the SNN graph on which EMR-CGC is built.
+The main results (Table~\ref{tab:main_results}) select the best engine per dataset using ground-truth ARI---an oracle unavailable at deployment, where the gate must choose from internal metrics alone. Table~\ref{tab:gate} quantifies the gap (five seeds, full data): the deployable gate reaches mean ARI $0.623$ against the oracle's $0.646$ and the baseline's $0.580$, recovering $65\%$ of the oracle's gain over the baseline and agreeing with the oracle's engine choice on $6$ of $12$ datasets. The residual gap is a direct expression of the internal--external misalignment that motivates this work: the gate errs exactly where an engine is best by ARI but not by internal score---most visibly on Olivetti, where it prefers AMR-DE ($0.237$) over the stronger EMR-CGC ($0.337$). The same mechanism makes the gate non-monotone over the baseline---on Wine it prefers AMR-DE and loses $0.011$ ARI---and, in aggregate, leaves it slightly below EMR-CGC alone ($0.623$ vs $0.631$). We therefore treat the oracle as an upper bound and present the gate as a conservative, honestly deployable rule, and regard closing their gap---better label-free proxies for external quality---as the central open problem. The ensemble's own ingredients invite scrutiny, beginning with the SNN graph on which EMR-CGC is built.
 
 \input{generated/gate_oracle_table.tex}
 
@@ -739,19 +713,26 @@ The main results (Table~\ref{tab:main_results}) select the best engine per datas
 
 SNN weighting is not a uniform win, and it is worth being precise about where it helps. Under a matched single-graph protocol (same UMAP representation, $k{=}35$, $r{=}0.25$), swapping KNN+Louvain for SNN+Leiden changes mean ARI only marginally---from 0.580 to 0.568, a $1.2$-point decrease on average. The average, however, hides a clear pattern that follows the theory of \S\ref{sec:rationale}: SNN improves precisely on the \emph{high-dimensional} datasets, where distance concentration degrades raw-distance weights---Olivetti ($d{=}4096$, $+0.027$), CNAE-9 ($d{=}856$, $+0.028$), and COIL-20 ($d{=}1024$, $+0.038$)---while it costs accuracy on lower-dimensional inputs (USPS $-0.076$, PenDigits $-0.058$). SNN is therefore a targeted tool for high-dimensional regimes, not a blanket improvement, and EMR-CGC's overall gain comes primarily from \emph{ensemble diversity} (five representations $\times$ twelve configurations with best-run selection) rather than from the SNN weighting alone. Neither choice removes every limitation, which we list next.
 
+\subsection{Robustness}
+
+To probe where the method holds and breaks, we stress it on controlled synthetic data (\texttt{make\_classification}, ground truth known) along four axes (Table~\ref{tab:robustness}). The gate is \emph{robust to class imbalance} (mean ARI $0.49$--$0.60$ from balanced up to a $30{\times}$ ratio) and \emph{improves with larger $n$} ($0.32$ at $n{=}1000$ to $0.79$ at $n{=}10000$) and with cluster separation (up to $0.97$). Its clear failure mode is \emph{irrelevant dimensions}: adding noise features to the $20$ informative ones collapses ARI from $0.52$ to near zero---and it is \emph{every} engine that fails, not just the gate, because the UMAP graph is built on a distance that uninformative features dominate. DEAC therefore carries a scope condition: it assumes the informative signal is not swamped by irrelevant features.
+
+\input{generated/robustness_table.tex}
+
 \subsection{Limitations}
 
-(i)~\emph{Runtime.} EMR-CGC's 60-run ensemble is costlier than single-shot methods, though it stays under 60\,s per dataset in our experiments.
-(ii)~\emph{Internal--external gap.} The QualityGate decides on internal metrics (MOD, SIL, BAL), which do not align perfectly with ARI, so the deployable gate is not strictly monotone over the baseline---on Wine it prefers AMR-DE on internal grounds and loses $0.028$ ARI (Table~\ref{tab:gate}).
+(i)~\emph{Runtime.} EMR-CGC's 60-run ensemble is costlier than single-shot methods---seconds to a few minutes per dataset in our experiments---and is the dominant cost of the pipeline.
+(ii)~\emph{Internal--external gap.} The gate decides on internal metrics (MOD, SIL, BAL), which do not align with ARI, so it is not strictly monotone over the baseline---on Wine it prefers AMR-DE and loses $0.011$ ARI---and in aggregate scores below the EMR-CGC ensemble it arbitrates ($0.623$ vs $0.631$); its deployable cluster-count error is also large (Table~\ref{tab:ccount}).
 (iii)~\emph{Scalability.} SNN is $\mathcal{O}(n k^2)$, so very large $n$ ($>50{,}000$) would require approximate-NN construction.
-(iv)~\emph{Oracle vs.\ deployable gap.} The main-table DEAC is an oracle upper bound; the deployable label-free gate recovers $75\%$ of its gain over the baseline and sits modestly below N2D (Table~\ref{tab:gate}). Closing this gap with better internal proxies for external quality---or a learned representation in the RepScan stage---is the primary open problem.
+(iv)~\emph{Oracle vs.\ deployable gap.} The label-free gate recovers $65\%$ of the oracle's gain over the baseline and trails N2D (Table~\ref{tab:gate}). Across learned, stability, and consensus selectors the gap does not close (best $64\%$), so closing it---better label-free proxies for external quality, or a learned notion of it---is the primary open problem and plausibly requires some supervision.
+(v)~\emph{Irrelevant features.} Like other distance/graph methods, DEAC degrades sharply when informative features are outnumbered by irrelevant ones (Table~\ref{tab:robustness}); it presumes a modest feature-relevance ratio or a prior feature-selection step.
 
 % ============================================================
 % 6. CONCLUSION
 % ============================================================
 \section{Conclusion}\label{sec:conc}
 
-We presented DEAC (Defensive Ensemble Adaptive Clustering), a framework for graph-based clustering of high-dimensional data that infers the cluster count rather than requiring it. Its core is a multi-representation SNN--Leiden ensemble (EMR-CGC) arbitrated by a three-layer QualityGate, with a complementary DE-optimized engine (AMR-DE) that contributes on specific regimes. The design is motivated by a negative result---optimizing internal metrics can degrade external accuracy---against which the gate is built to defend. DEAC lifts mean ARI by 13.1\% over the baseline across 12 benchmarks; when every method must discover $C$, it significantly outperforms five classical methods on 9 of 12 datasets (Holm-corrected Wilcoxon, Friedman $p{<}0.001$); and an oracle over its engines matches the strongest deep-clustering method (N2D) while inferring the cluster count that N2D is given, with the deployable label-free gate recovering $75\%$ of that oracle's gain. Three extensions remain open.
+We presented evidence that internal clustering metrics are an unreliable proxy for external accuracy---an engine that maximizes modularity and silhouette scores \emph{below} an unoptimized baseline ($0.563$ vs $0.580$ mean ARI)---and a characterization of how far a label-free rule can close the resulting oracle--deployable gap. The framework, DEAC (Defensive Ensemble Adaptive Clustering), makes this precise: a multi-representation SNN--Leiden ensemble (EMR-CGC) that infers the cluster count and is competitive with strong classical and deep baselines ($0.631$ mean ARI, trailing only N2D), arbitrated by a three-layer QualityGate that acts as a conservative safety net ($0.623$) rather than an accuracy booster. The label-aware oracle ($0.646$) only matches N2D, and no label-free selector we tested---metric re-weighting, learned, stability, or consensus---recovers more than $65\%$ of its gain over the baseline, indicating the gap is structural. The lesson is that the bottleneck in automatic clustering is not clustering power but the inability to \emph{recognize} a good partition without labels. Three extensions remain open.
 
 The first is approximate-NN SNN construction, which would extend DEAC beyond $n{=}50$k. The second is integrating deep representation learning into the RepScan stage. The third is a semi-supervised variant that uses partial labels to close the internal--external metric gap identified in \S\ref{sec:disc}.
 
@@ -861,6 +842,9 @@ K.~Beyer, J.~Goldstein, R.~Ramakrishnan, and U.~Shaft, ``When is ``nearest neigh
 
 \bibitem{houle2010shared}
 M.~E.~Houle, H.-P.~Kriegel, P.~Kr\"{o}ger, E.~Schubert, and A.~Zimek, ``Can shared-neighbor distances defeat the curse of dimensionality?'' in \emph{Proc.\ SSDBM}, 2010, pp.~482--500.
+
+\bibitem{ghriss2025prcut}
+A.~Ghriss and C.~Monteleoni, ``Deep clustering via probabilistic ratio-cut optimization,'' in \emph{Proc.\ AISTATS}, 2025.
 
 \end{thebibliography}
 

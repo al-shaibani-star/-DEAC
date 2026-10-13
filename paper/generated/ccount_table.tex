@@ -1,6 +1,7 @@
+% canonical cluster counts (deployable gate)
 \begin{table}[!t]
 \centering
-\caption{Predicted cluster count $C_{\text{pred}}$ per method vs.\ ground-truth $C_{\text{true}}$. Best (closest to $C_{\text{true}}$) in bold. DEAC is the oracle selection (upper bound).}
+\caption{Predicted cluster count (mean over 5 seeds) vs.\ ground truth. DEAC is the deployable gate's selected engine; recovering the right granularity without labels is itself hard (part of the misalignment). Best (closest to $C_{\text{true}}$) in bold.}
 \label{tab:ccount}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -8,21 +9,21 @@
 \toprule
 Dataset & $C_{\text{true}}$ & Baseline & AMR-DE & EMR-CGC & \textbf{DEAC} \\
 \midrule
-Wine         & 3 & \textbf{3} & 4 & \textbf{3} & \textbf{3} \\
-Glass        & 6 & 5 & 5 & \textbf{6} & \textbf{6} \\
-Olivetti     & 40 & 33 & 35 & \textbf{38} & \textbf{38} \\
-CNAE-9       & 9 & 8 & \textbf{9} & \textbf{9} & \textbf{9} \\
-COIL-20      & 20 & 18 & \textbf{20} & 19 & \textbf{20} \\
-Optdigits    & 10 & \textbf{10} & 11 & \textbf{10} & \textbf{10} \\
-MFeat        & 10 & \textbf{10} & \textbf{10} & \textbf{10} & \textbf{10} \\
-Segment.     & 7 & \textbf{7} & 11 & \textbf{7} & \textbf{7} \\
-Satimage     & 6 & 7 & 9 & \textbf{6} & \textbf{6} \\
-ISOLET       & 26 & 24 & \textbf{25} & \textbf{25} & \textbf{25} \\
-USPS         & 10 & \textbf{10} & 13 & \textbf{10} & \textbf{10} \\
-PenDigits    & 10 & 11 & 13 & \textbf{10} & \textbf{10} \\
+Wine & 3 & \textbf{3} & \textbf{3} & \textbf{3} & \textbf{3} \\
+Glass & 6 & \textbf{3} & 10 & 9 & 9 \\
+Olivetti & 40 & 5 & 13 & \textbf{19} & 13 \\
+CNAE-9 & 9 & 10 & 15 & \textbf{9} & 10 \\
+COIL-20 & 20 & 15 & \textbf{21} & 16 & 16 \\
+Optdigits & 10 & 13 & 14 & \textbf{11} & \textbf{11} \\
+MFeat & 10 & 12 & 12 & \textbf{10} & \textbf{10} \\
+Segment. & 7 & 21 & 28 & 23 & \textbf{21} \\
+ISOLET & 26 & \textbf{23} & 32 & 22 & 22 \\
+Satimage & 6 & 13 & 29 & \textbf{10} & \textbf{10} \\
+USPS & 10 & 11 & 19 & \textbf{10} & 11 \\
+PenDigits & 10 & 26 & 34 & \textbf{20} & 21 \\
 \midrule
-\textbf{MAE} & --- & 1.25 & 1.83 & 0.33 & \textbf{0.25} \\
-\textbf{Exact} & --- & 5/12 & 3/12 & 9/12 & \textbf{10/12} \\
+\textbf{MAE} & --- & 7.53 & 10.57 & 5.25 & 5.77 \\
+\textbf{Exact} & --- & 1/12 & 1/12 & 4/12 & 2/12 \\
 \bottomrule
 \end{tabular}
 \end{table}

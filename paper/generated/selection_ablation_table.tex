@@ -1,0 +1,19 @@
+% R2.3(d,e) selection-rule / gate-layer ablation
+\begin{table}[htbp]
+\centering
+\caption{Deployable selection-rule ablation (mean ARI, 12 datasets, 5 seeds). Removing the rho guard (best-internal) and removing AMR-DE from the gate both leave performance essentially unchanged; the trivial `always-EMR-CGC' policy slightly exceeds the gate. The gate's role is protective (it avoids the optimizer's worst picks), not accuracy-maximizing.}
+\label{tab:selection}
+\footnotesize
+\begin{tabular}{lcc}
+\toprule
+Deployable policy & Mean ARI & Oracle-gain recovery \\
+\midrule
+Always-Baseline (no selection) & 0.580 & +0\% \\
+Always-EMR-CGC & 0.631 & +77\% \\
+Best-internal (no rho guard) & 0.624 & +66\% \\
+QualityGate w/o AMR-DE & 0.621 & +62\% \\
+\textbf{QualityGate (full)} & 0.624 & +66\% \\
+\textit{Oracle (upper bound)} & 0.646 & +100\% \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,21 @@
+{
+  "idx": 3,
+  "label": "imbalance x30",
+  "seed": 1001,
+  "n": 2000,
+  "d": 20,
+  "C_true": 10,
+  "ari": {
+    "Baseline": 0.5890024937845536,
+    "AMR-DE": 0.5916187525249293,
+    "EMR-CGC": 0.5553314605268966
+  },
+  "C": {
+    "Baseline": 4,
+    "AMR-DE": 4,
+    "EMR-CGC": 3
+  },
+  "gate_pick": "EMR-CGC",
+  "gate_ari": 0.5553314605268966,
+  "oracle_ari": 0.5916187525249293
+}

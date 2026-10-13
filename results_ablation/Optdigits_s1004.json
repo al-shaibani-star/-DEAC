@@ -1,0 +1,24 @@
+{
+  "name": "Optdigits",
+  "seed": 1004,
+  "n": 1797,
+  "C_true": 10,
+  "cfg": {
+    "PCA+KNN+Louvain": {
+      "ari": 0.35515610136481945,
+      "C": 6
+    },
+    "UMAP+KNN+Louvain": {
+      "ari": 0.8627597525654619,
+      "C": 13
+    },
+    "UMAP+KNN+Leiden": {
+      "ari": 0.8627597525654619,
+      "C": 13
+    },
+    "UMAP+SNN+Leiden": {
+      "ari": 0.8426402309858926,
+      "C": 11
+    }
+  }
+}
