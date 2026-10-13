@@ -307,7 +307,7 @@ With two independent candidates in hand, arbitration becomes the next question.
 
 \subsection{QualityGate}
 
-The QualityGate (Fig.~\ref{fig:qg}) is a three-layer adaptive filter that selects $\max(\hat{\mathbf{y}}_B, \hat{\mathbf{y}}_{DE}, \hat{\mathbf{y}}_{EMR})$ using internal quality scores. Its C-ratio threshold $\rho = \max(4, \sqrt{n/50})$ is dataset-adaptive: larger datasets are permitted proportionally more clusters, while small ones are protected from over-fragmentation. Algorithms~\ref{alg:deac}--\ref{alg:emrcgc} give the full procedure.
+The QualityGate (Fig.~\ref{fig:qg}) is a three-layer adaptive filter that selects $\max(\hat{\mathbf{y}}_B, \hat{\mathbf{y}}_{DE}, \hat{\mathbf{y}}_{EMR})$ using internal quality scores. In Fig.~\ref{fig:qg}, $B$ denotes the baseline partition $\hat{\mathbf{y}}_B$ and $H$ (the challenger, labelled ``hybrid'' there) is whichever engine output $\hat{\mathbf{y}}_{DE}$ or $\hat{\mathbf{y}}_{EMR}$ scores higher internally; the gate accepts $H$ only when it clears all three layers and otherwise falls back to $B$. Its C-ratio threshold $\rho = \max(4, \sqrt{n/50})$ is dataset-adaptive: larger datasets are permitted proportionally more clusters, while small ones are protected from over-fragmentation. Algorithms~\ref{alg:deac}--\ref{alg:emrcgc} give the full procedure.
 
 \begin{figure}[!t]
 \centering
@@ -431,7 +431,7 @@ PenDigits    & 10992 & 16   & 10 & Handwriting \\
 
 \subsection{Evaluation Protocol}
 
-Three external validity indices are reported: Adjusted Rand Index (ARI)~\cite{hubert1985comparing}, Normalized Mutual Information (NMI)~\cite{strehl2002cluster}, and Clustering Accuracy (ACC)~\cite{yang2010image}. Unless noted, results are averaged over five fixed seeds ($1001$--$1005$) for reproducibility. DEAC is configured with AMR-DE ($G{=}8$ generations, population $P{=}5$, $R{=}2$ restarts over the four hyperparameters $k,d',q,r$) and EMR-CGC (60 base clusterings). The baseline is UMAP+Louvain with community-standard settings ($k{=}35$, $q{=}0.1$, resolution $0.25$)---a legitimate reference rather than a deliberately weakened one; indeed it is the single strongest engine on 1 of 12 datasets. With the protocol fixed, we turn to the headline results.
+Three external validity indices are reported: Adjusted Rand Index (ARI)~\cite{hubert1985comparing}, Normalized Mutual Information (NMI)~\cite{strehl2002cluster}, and Clustering Accuracy (ACC)~\cite{yang2010image}. Unless noted, results are averaged over five fixed seeds ($1001$--$1005$) for reproducibility. DEAC is configured with AMR-DE ($G{=}8$ generations, population $P{=}20$, $R{=}2$ restarts over the four hyperparameters $k,d',q,r$) and EMR-CGC (60 base clusterings). The baseline is UMAP+Louvain with community-standard settings ($k{=}35$, $q{=}0.1$, resolution $0.25$)---a legitimate reference rather than a deliberately weakened one; indeed it is the single strongest engine on 1 of 12 datasets. With the protocol fixed, we turn to the headline results.
 
 \subsection{Main Results}
 
@@ -494,12 +494,13 @@ baselines (Spectral and HDBSCAN, $p_{\text{Holm}}{=}0.004$). It is statistically
 \emph{indistinguishable} from KMeans, GMM, Agglomerative, DEC, IDEC, and DCN,
 and it trails N2D. We therefore claim competitive---not superior---performance;
 the contribution of this paper is diagnostic (the internal--external
-misalignment and the oracle--deployable gap), not a new state of the art. The
-single-metric view may hide trade-offs, so we extend the comparison to NMI and ACC.
+misalignment and the oracle--deployable gap), not a new state of the art. These
+are all established baselines, so two very recent methods test whether the same
+standing holds against the current state of the art.
 
 \subsection{Comparison with Recent Methods}
 
-We additionally compare against two recent clustering methods: DPC-AKNN~\cite{wang2026density}, a 2026 density-peak method with adaptive KNN and geodesic distance, and PRCut~\cite{ghriss2025prcut}, a 2025 probabilistic ratio-cut deep method. Both are given the true cluster count; PRCut is run on the \emph{same} UMAP representation as our engines (a controlled common-representation comparison) using the authors' released implementation, while DPC-AKNN uses its native raw-feature geodesic pipeline. Table~\ref{tab:recent} shows the deployable gate (0.623) and EMR-CGC (0.631) are on par with PRCut (0.631) and close to N2D (0.642), and well above DPC-AKNN (0.420)---while, unlike all three comparators, inferring the cluster count rather than being told it. Being competitive with the latest methods \emph{without} the count, not beating them, is the honest claim.
+We additionally compare against two recent clustering methods: DPC-AKNN~\cite{wang2026density}, a 2026 density-peak method with adaptive KNN and geodesic distance, and PRCut~\cite{ghriss2025prcut}, a 2025 probabilistic ratio-cut deep method. Both are given the true cluster count; PRCut is run on the \emph{same} UMAP representation as our engines (a controlled common-representation comparison) using the authors' released implementation, while DPC-AKNN uses its native raw-feature geodesic pipeline. Table~\ref{tab:recent} shows the deployable gate (0.623) and EMR-CGC (0.631) are on par with PRCut (0.631) and close to N2D (0.642), and well above DPC-AKNN (0.420)---while, unlike all three comparators, inferring the cluster count rather than being told it. Being competitive with the latest methods \emph{without} the count, not beating them, is the honest claim. Whether this standing survives on metrics beyond ARI is the next check.
 
 \input{generated/recent_table.tex}
 
@@ -562,7 +563,7 @@ Fig.~\ref{fig:qualitative} shows t-SNE projections of DEAC clusters (top) and si
 
 \subsection{Optimization Dynamics}
 
-Fig.~\ref{fig:optim_dynamics} shows DE convergence curves and parameter exploration trajectories. Each restart converges within 6--8 generations; the trajectory axis concatenates the $R{=}2$ restarts (so it extends beyond generation~8) before Nelder--Mead refines the best candidate. The nominal evaluation budget is $R\cdot G\cdot P\cdot 4{\approx}320$ fitness evaluations (Table~\ref{tab:complexity}). To separate the contribution of each component, we now ablate them.
+Fig.~\ref{fig:optim_dynamics} shows DE convergence curves and parameter exploration trajectories. Each restart converges within 6--8 generations; the trajectory axis concatenates the $R{=}2$ restarts (so it extends beyond generation~8) before Nelder--Mead refines the best candidate. The nominal evaluation budget is $R\cdot G\cdot P{\approx}320$ fitness evaluations (Table~\ref{tab:complexity}). To separate the contribution of each component, we now ablate them.
 
 \begin{figure}[!t]
 \centering
@@ -658,7 +659,7 @@ t-SNE (Barnes--Hut)   & $\mathcal{O}(n \log n)$             & near-linear$^\ast$
 KNN graph             & $\mathcal{O}(nk \cdot d')$          & $\mathcal{O}(nk \cdot 40)$ \\
 SNN graph             & $\mathcal{O}(nk^2)$                 & $\mathcal{O}(n \cdot k^2)$ \\
 Leiden                & $\mathcal{O}(m \log n)$             & near-linear \\
-AMR-DE (all evals)    & $\mathcal{O}(E \cdot F_c)$          & $E{=}RGP{\cdot}4{\approx}320$ \\
+AMR-DE (all evals)    & $\mathcal{O}(E \cdot F_c)$          & $E{=}RGP{\approx}320$ \\
 EMR-CGC ensemble      & $\mathcal{O}(M|K||R| F_c)$          & $60 \cdot F_c$ \\
 \midrule
 \textbf{Total DEAC}   & $\mathcal{O}(n^{1.14} d' + n k^2)$  & sub-quadratic \\
