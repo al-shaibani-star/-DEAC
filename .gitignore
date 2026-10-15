@@ -50,3 +50,6 @@ external/
 # redundant build-artifact archives
 *.zip
 paper/figures/*.orig.png
+
+# redundant packaging folder (files already tracked in paper/ and resubmission/)
+resubmission/IJIES_Send_Hussein_20266428/

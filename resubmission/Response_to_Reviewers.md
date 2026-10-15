@@ -34,13 +34,13 @@ We release the **full-precision per-seed ARI matrix** (`canonical_matrix.csv`). 
 The caption is corrected (no "9 of 12" claim), the figures are regenerated with correct values (Olivetti baseline ≈0.06), and the main results table now **separates the three engines, the deployable gate, and the oracle** in distinct columns. (Fig. "metric bars"; Table "Main Results".)
 
 **R1.6 — Figure 10 trajectories reach ~generation 13 though G=8; reconcile with the P·G·R budget and E≈200.**
-The DE configuration is corrected to the values actually used (**G=8, population P=5, R=2 restarts** over the four hyperparameters). The trajectory text and caption now state that the horizontal axis **concatenates the R=2 restarts** (hence it exceeds generation 8) before Nelder–Mead refinement, and the evaluation budget is reconciled as E = R·G·P·4 ≈ 320 in the complexity table. (Secs. "Evaluation Protocol", "Optimization Dynamics"; Table "complexity".)
+The DE configuration is now stated consistently across the text and the figures as **G=8 generations, population P=20 (the LHS-initialised population over the four-dimensional search), R=2 restarts**. The trajectory text and caption state that the horizontal axis **concatenates the R=2 restarts** (hence it exceeds generation 8) before Nelder–Mead refinement, and the evaluation budget is reconciled as E = R·G·P ≈ 320 (= 2·8·20) in the complexity table, replacing the earlier "E≈200". The AMR-DE schematic (Fig. 3) now shows the same P=20. (Secs. "Evaluation Protocol", "Optimization Dynamics"; Table "complexity"; Fig. 3.)
 
 **R1.7 — Table 13 labels t-SNE O(n²) yet the total sub-quadratic; provide measured timing and peak memory.**
 The complexity table is corrected: t-SNE uses the Barnes–Hut approximation (output dimension ≤3), which is O(n log n); the sub-quadratic total then holds, with the O(nk²) SNN term dominating. We add **measured end-to-end wall-clock and peak memory** for the full three-engine pipeline: Wine (n=178) 29 s / 0.6 GB, MFeat (n=2000) 102 s / 0.7 GB, USPS (n=9298) 200 s / 1.8 GB. (Sec. "Computational Complexity"; Table "complexity".)
 
 **R1.8 — Specify the executable algorithm; "hybrid candidate H"; r as pruning vs resolution.**
-The "hybrid H" term and the r-as-pruning mislabel were artifacts of the earlier draft and are absent in the revised text (q is pruning, r is the Leiden resolution throughout). The gate description now matches the **implemented deployable form** — among ρ-eligible engines, select the highest internal score (0.40 MOD + 0.35 SIL + 0.25 BAL) — and notes that the Δs and regression checks are conservative safeguards that rarely bind (shown in the sensitivity analysis). The exact score normalizations, search bounds, integer rounding, graph bridging, and small-community merging are provided in the **released reference implementation**. (Sec. "Design Rationale"; code repository.)
+The parameter-definition conflict is resolved in **both the text and the schematics**: Figures 3 and 4 now label **q as the pruning quantile and r as the Leiden resolution** (the earlier "r = pruning ratio" / "q = quantile level" labels are removed), matching the released code (`fast_amr_de.py`, where `vec[2]` is the pruning quantile and `vec[3]` is the resolution). The "hybrid candidate H" is now defined explicitly where the gate is introduced: **B is the baseline partition and H is whichever engine output (AMR-DE or EMR-CGC) scores higher internally; the gate accepts H only if it clears all three layers, else falls back to B.** The gate description matches the **implemented deployable form** — among ρ-eligible engines, select the highest internal score (0.40 MOD + 0.35 SIL + 0.25 BAL) — with the Δs and regression checks as conservative safeguards that rarely bind (sensitivity analysis). The exact score normalisations, search bounds, integer rounding, graph bridging, and small-community merging are in the **released reference implementation**. (Secs. "QualityGate", "Design Rationale"; Figs. 3–4; code repository.)
 
 **R1.9 — Archive machine-readable artifacts to reconcile outputs.**
 We release, from a single canonical run: a **full-precision per-seed matrix** of internal scores, cluster counts, and gate decisions (`canonical_matrix.csv`); all per-seed result files; and every script that generates each figure, table, and statistical test. The claim in the manuscript is stated to match exactly what is released. (Code & data availability statement; repository.)
@@ -63,6 +63,19 @@ Both recent methods are added, each **given the true cluster count** (our gate/E
 
 **R2.5 — p=0.622 is not equality; report effect sizes, uncertainty, an equivalence margin; dataset-level vs per-dataset significance; robustness.**
 (i) The "tied with N2D" wording is replaced by a quantified statement: gate − N2D = −0.019 mean ARI (95% CI [−0.079, +0.040]; Wilcoxon p=0.73; Cohen's d_z=−0.18), and a **TOST equivalence test does not establish equivalence even at a ±0.05 margin (p=0.17)** — we claim neither superiority nor equivalence. (ii) All significance statements are now explicitly dataset-level Wilcoxon/Holm; per-dataset win counts are reported as wins, not significance. (iii) A **robustness study** on controlled synthetic data shows the method is robust to class imbalance (ARI 0.49–0.60 up to 30×), improves with separation and with larger n (0.32→0.79 as n:1000→10000), and degrades sharply only under many irrelevant dimensions — stated as an explicit scope limitation. (Secs. "Statistical Significance", "Robustness", "Limitations"; Table "robustness".)
+
+---
+
+## Additional Comments (Editorial)
+
+**A1 — Tables and figures must be cited, provided with legends, and numbered serially.**
+Every figure and table is now **cited in the running text** (Fig. 1–11 and Table 1–19 are each referenced where they are discussed), carries a **legend**, and is **numbered serially**. Figure captions appear centred below the figure and table titles centred above the table, in the "Fig. N." / "Table N." form. In-text reference citations, which were missing from the Word export, are restored and numbered ([1]–[34]).
+
+---
+
+## Formatting
+
+The manuscript has been reformatted to the official **IJIES template (Ver. 2026.10.1, `IJIES_Format.docx`)**: A4 two-column layout within the prescribed print area; Times New Roman throughout (14 pt title, 11 pt author, 11 pt body, 10 pt abstract/keywords/captions, 12/11/10 pt headings); numbered first-order headings with a period; the required **Conflicts of Interest** and **Acknowledgments** statements; and the IJIES reference style. No figure, table, or equation extends beyond the print area.
 
 ---
 
